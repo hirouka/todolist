@@ -116,8 +116,9 @@ export class AuthentPage implements OnInit {
     }
 
     resetPassword(value: any): any {
-        console.log(value.email);
-        return firebase.auth().sendPasswordResetEmail(value.email);
+        this.navCtrl.navigateForward('/reset-pass');
+        /*console.log(value.email);
+        return firebase.auth().sendPasswordResetEmail(value.email);*/
     }
 
     loginwithfacebook() {

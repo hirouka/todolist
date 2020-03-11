@@ -20,8 +20,13 @@ export class AdditemPage implements OnInit {
 
   addItem() {
     const item = { title: this.title, isDone : false } as Item;
-    this.listService.addItem(item);
-    this.router.navigate(['/todo-item']);
+    this.listService.addItem(item).then(()=>{
+      this.listService.getUnsubscribe();
+
+    });
+    this.router.navigate(['/todo-item']).then(()=>{
+      this.listService.getUnsubscribe();
+    });
   }
 
   retourPagetodo() {

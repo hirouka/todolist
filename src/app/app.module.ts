@@ -23,9 +23,12 @@ import {AuthService} from './auth.service';
 import {ReactiveFormsModule} from '@angular/forms';
 import {AuthGuard} from './services/auth.gaurd';
 import {Facebook} from '@ionic-native/facebook/ngx';
-
+import { Camera } from '@ionic-native/camera/ngx';
+import {ResetPassPage} from './reset-pass/reset-pass.page';
+import {ResetPassPageModule} from './reset-pass/reset-pass.module';
 firebase.initializeApp(environment.firebase);
 
+// @ts-ignore
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -35,7 +38,8 @@ firebase.initializeApp(environment.firebase);
     AngularFireAuthModule,
     AngularFireDatabaseModule,
     AngularFirestoreModule,
-    AngularFireStorageModule, ReactiveFormsModule],
+    AngularFireStorageModule, ReactiveFormsModule, ResetPassPageModule],
+
   providers: [
     StatusBar,
     SplashScreen,
@@ -43,6 +47,7 @@ firebase.initializeApp(environment.firebase);
     AuthService,
     AuthGuard,
     Facebook,
+    Camera,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

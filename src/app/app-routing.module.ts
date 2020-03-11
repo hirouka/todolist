@@ -23,19 +23,27 @@ const routes: Routes = [
   },
   {
     path: 'addlisttodo',
-    loadChildren: () => import('./addlisttodo/addlisttodo.module').then( m => m.AddlisttodoPageModule)
+    loadChildren: () => import('./addlisttodo/addlisttodo.module').then( m => m.AddlisttodoPageModule), canActivate : [AuthGuard]
   },
   {
     path: 'todo-item',
-    loadChildren: () => import('./todo-item/todo-item.module').then( m => m.TodoItemPageModule)
+    loadChildren: () => import('./todo-item/todo-item.module').then( m => m.TodoItemPageModule), canActivate : [AuthGuard]
   },
   {
     path: 'additem',
-    loadChildren: () => import('./additem/additem.module').then( m => m.AdditemPageModule)
+    loadChildren: () => import('./additem/additem.module').then( m => m.AdditemPageModule), canActivate : [AuthGuard]
   },
   {
     path: 'share-todo',
-    loadChildren: () => import('./share-todo/share-todo.module').then( m => m.ShareTodoPageModule)
+    loadChildren: () => import('./share-todo/share-todo.module').then( m => m.ShareTodoPageModule), canActivate : [AuthGuard]
+  },
+  {
+    path: 'camera',
+    loadChildren: () => import('./camera/camera.module').then( m => m.CameraPageModule)
+  },
+  {
+    path: 'reset-pass',
+    loadChildren: () => import('./reset-pass/reset-pass.module').then( m => m.ResetPassPageModule)
   }
 ];
 

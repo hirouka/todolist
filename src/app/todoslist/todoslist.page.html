@@ -60,6 +60,12 @@
           <ion-button color="dark" (click)=shareTodo(item?.id)>
             <ion-icon name="share"></ion-icon>
           </ion-button>
+          <ion-button (click)="takeSnap()">
+            Take Snap
+          </ion-button>
+
+          <ion-button (click)="upload(item?.id)"></ion-button>
+
         </ion-item>
 
 

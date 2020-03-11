@@ -6,6 +6,8 @@ import {AuthService} from '../auth.service';
 import {NavController} from '@ionic/angular';
 import {FormGroup} from '@angular/forms';
 import {Router} from '@angular/router';
+import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-todoslist',
@@ -18,7 +20,14 @@ export class TodoslistPage implements OnInit {
   navigate: any;
   itmbool = false;
   id: string;
+    capturedSnapURL:string;
 
+    cameraOptions: CameraOptions = {
+        quality: 20,
+        destinationType: this.camera.DestinationType.DATA_URL,
+        encodingType: this.camera.EncodingType.JPEG,
+        mediaType: this.camera.MediaType.PICTURE
+    }
 
     validationsform: FormGroup;
   errorMessage = '';
@@ -28,15 +37,13 @@ export class TodoslistPage implements OnInit {
   public ListWriters: any;
     lecture= false;
   // tslint:disable-next-line:no-shadowed-variable
-  constructor(private listService: TodoslistService, private authservice: AuthService,  private navCtrl: NavController, public route: Router
+  constructor(private listService: TodoslistService, private authservice: AuthService,  private navCtrl: NavController, public route: Router,private camera: Camera
   ) {
     this.itmbool = false;
     this.a = this.authservice.a;
     this.Listtodos = this.listService.get();
     this.ListReaders = this.listService.getReaders();
     this.ListWriters = this.listService.getWriters();
-
-
 
   }
 
@@ -47,7 +54,32 @@ export class TodoslistPage implements OnInit {
       this.ListWriters = this.listService.getWriters();
   }
 
+    takeSnap() {
+        this.camera.getPicture(this.cameraOptions).then((imageData) => {
+            // this.camera.DestinationType.FILE_URI gives file URI saved in local
+            // this.camera.DestinationType.DATA_URL gives base64 URI
+            console.log("Avant");
 
+            let base64Image = 'data:image/jpeg;base64,' + imageData;
+            this.capturedSnapURL = base64Image;
+            console.log("Apres");
+
+        }, (err) => {
+
+            console.log(err);
+            // Handle error
+        });
+    }
+
+    upload(id: string) {
+        const storageRef = firebase.storage().ref();
+            const filename = Math.floor(Date.now() / 1000);
+        const imageRef = storageRef.child( id +`/${filename}.jpg`);
+        imageRef.putString(this.capturedSnapURL, firebase.storage.StringFormat.DATA_URL)
+            .then((snapshot) => {
+
+            });
+    }
 
     /**
      * Renvoyer la liste des taches

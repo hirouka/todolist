@@ -15,6 +15,7 @@ export class AuthService {
 
     constructor(private router: Router, private fires: AngularFirestore , private todolistservice: TodoslistService) {
     }
+
     SendVerificationMail() {
         return firebase.auth().currentUser.sendEmailVerification()
             .then(() => {
@@ -66,6 +67,7 @@ export class AuthService {
                     .then(() => {
                         console.log('LOG Out');
                         resolve();
+                        this.todolistservice.getUnsubscribe();
                         this.todolistservice.clean_list();
                     }).catch((error) => {
                     reject();

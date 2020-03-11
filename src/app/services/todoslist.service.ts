@@ -18,6 +18,9 @@ export class TodoslistService {
   private usersCollection: AngularFirestoreCollection<any>;
   private todolistCollectionReader : AngularFirestoreCollection<List>;
   private todolistCollectionWriter : AngularFirestoreCollection<List>;
+  private   unsubtodos:any;
+  private   unsubReaders:any;
+  private   unsubWriter:any;
 
   private todos: Observable<Array<List>>;
   private readers: Observable<Array<List>>;
@@ -27,6 +30,8 @@ export class TodoslistService {
   public listtodos: Array<List>;
   public listreaders: Array<List>;
   public listwriters: Array<List>;
+
+
 
   id: string;
   private userId: string;
@@ -86,16 +91,16 @@ export class TodoslistService {
             return { id, ...data };
           });
         }));
-    this.todos.subscribe(res => {
+    this.unsubtodos = this.todos.subscribe(res => {
       this.listtodos = res;
 
     });
 
-    this.readers.subscribe(res => {
+    this.unsubReaders =  this.readers.subscribe(res => {
       this.listreaders = res;
     });
 
-    this.writers.subscribe(res => {
+    this.unsubWriter= this.writers.subscribe(res => {
       this.listwriters = res;
     });
   }
@@ -213,5 +218,11 @@ export class TodoslistService {
           merge: true
         }
     );
+  }
+
+  getUnsubscribe(){
+     this.unsubtodos.unsubscribe();
+     this.unsubReaders.unsubscribe();
+     this.unsubWriter.unsubscribe();
   }
 }
