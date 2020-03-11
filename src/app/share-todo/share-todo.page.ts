@@ -22,7 +22,7 @@ export class ShareTodoPage implements OnInit {
 
   addUser() {
     // tslint:disable-next-line:triple-equals
-    if (this.writer.length >0 && this.writer.length > 0 && this.writer == this.reader) {
+    if (this.writer.length >0 && this.reader.length > 0 && this.writer == this.reader) {
       this.listService.addUserwriter(this.listService.id, this.writer);
     } else{
       if (this.reader.length > 0) {

@@ -26,6 +26,7 @@ export class TodoslistPage implements OnInit {
   public Listtodos: any;
   public ListReaders: any;
   public ListWriters: any;
+    lecture= false;
   // tslint:disable-next-line:no-shadowed-variable
   constructor(private listService: TodoslistService, private authservice: AuthService,  private navCtrl: NavController, public route: Router
   ) {
