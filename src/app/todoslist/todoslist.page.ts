@@ -15,10 +15,12 @@ import * as firebase from 'firebase';
   styleUrls: ['./todoslist.page.scss'],
 })
 export class TodoslistPage implements OnInit {
-    @Output() iid;
+ @Output() iid;
   a: string;
   navigate: any;
   itmbool = false;
+  enEcriture = false; 
+  enLecture = true; 
   id: string;
     capturedSnapURL:string;
 
@@ -89,6 +91,8 @@ export class TodoslistPage implements OnInit {
   }
 
     getListReaders() {
+        this.enLecture  = false;
+
         return this.listService.getReaders();
     }
 
@@ -130,6 +134,17 @@ export class TodoslistPage implements OnInit {
     shareTodo(id: string) {
         this.listService.id = id;
         this.route.navigate(['/share-todo']);
+    }
+    goToprofile(){
+        this.route.navigate(['/profile']);
+    }
+
+    partageEnEcriture(){
+        this.enEcriture = true;
+    }
+
+    partageEnLecture(){
+        this.enLecture  = true;
     }
 }
 

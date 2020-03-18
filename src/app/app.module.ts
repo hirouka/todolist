@@ -26,6 +26,7 @@ import {Facebook} from '@ionic-native/facebook/ngx';
 import { Camera } from '@ionic-native/camera/ngx';
 import {ResetPassPage} from './reset-pass/reset-pass.page';
 import {ResetPassPageModule} from './reset-pass/reset-pass.module';
+import { SpeechRecognition } from '@ionic-native/speech-recognition/ngx';
 firebase.initializeApp(environment.firebase);
 
 // @ts-ignore
@@ -47,6 +48,7 @@ firebase.initializeApp(environment.firebase);
     AuthService,
     AuthGuard,
     Facebook,
+    SpeechRecognition,
     Camera,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],

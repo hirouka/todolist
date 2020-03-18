@@ -10,6 +10,8 @@
 <ion-content>
   <form (ngSubmit)="addList()" #addListForm="ngForm">
     <ion-list lines="full" class="ion-no-margin ion-no-padding">
+      <ion-button (click)="startvoca1()" float-right> <ion-icon name="microphone"></ion-icon>
+      </ion-button>
       <ion-item>
         <ion-label position="stacked">Title <ion-text color="danger">*</ion-text>
         </ion-label>
@@ -17,6 +19,7 @@
         </ion-input>
         <ion-text [hidden]="ctrlTitle.valid || ctrlTitle.pristine " color="danger">Title is required</ion-text>
       </ion-item>
+
     </ion-list>    
     <div class="ion-padding">
       <ion-button expand="block" type="submit" class="ion-no-margin" [disabled]="!addListForm.valid">
