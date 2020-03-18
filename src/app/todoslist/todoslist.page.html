@@ -81,7 +81,7 @@
       </ion-item>
       <ion-item-sliding *ngFor="let item of getListReaders(); let i = index">
         <ion-item>
-          <ion-label (click)="Afficherhtml(item?.id)">
+          <ion-label (click)="Afficherhtml2(item?.id,'reader')">
             <h2> {{ item?.title}}</h2>
           </ion-label>
           <ion-button color="dark" (click)=shareTodo(item?.id)>

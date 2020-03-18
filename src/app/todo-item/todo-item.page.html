@@ -22,15 +22,15 @@
       <div *ngFor="let it of item.items; let i = index">
 -->
         <ion-item>
-          <ion-checkbox (ionChange)="changeCheckState(item)"  [(ngModel)]="item.isDone" color="danger" slot="start"></ion-checkbox>
+          <ion-checkbox (ionChange)="changeCheckState(item)" [disabled]="readerbool"  [(ngModel)]="item.isDone" color="danger" slot="start"></ion-checkbox>
             <ion-label>
-            <h2> tache : {{item.title}} {{item.isDone}}</h2>
+            <h2> tâche : {{item.title}}</h2>
           </ion-label>
         </ion-item>
 <!--
       </div>
 -->
-      <ion-item-options side="end">
+      <ion-item-options  *ngIf="!readerbool" side="end" >
         <ion-item-option color="danger">
           <ion-icon slot="top" name="trash"></ion-icon>
         </ion-item-option>
@@ -44,7 +44,7 @@
 </ion-content>
 
 <ion-footer>
-  <ion-toolbar>
+  <ion-toolbar *ngIf="!readerbool" >
     <ion-button float-right primary large expand="forward" [routerDirection]="['root']"  [routerLink]="['/additem']"> <ion-icon name="add-circle"></ion-icon></ion-button>
   </ion-toolbar>
 </ion-footer>

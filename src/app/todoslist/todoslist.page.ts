@@ -125,7 +125,15 @@ export class TodoslistPage implements OnInit {
 
     }
     Afficherhtml(id: string) {
+        this.listService.readerbool = false;
         this.listService.id  = id;
+        this.route.navigate(['/todo-item']);
+
+
+    }
+    Afficherhtml2(id: string , reader : string) {
+        this.listService.id  = id;
+        this.listService.readerbool = true;
         this.route.navigate(['/todo-item']);
 
 

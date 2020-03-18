@@ -35,6 +35,7 @@ export class TodoslistService {
 
   id: string;
   private userId: string;
+    readerbool: boolean;
 
   constructor(private db: AngularFirestore) {
     this.listtodos = new Array<List>();
@@ -131,6 +132,12 @@ export class TodoslistService {
   public getWriters(){
     return this.listwriters;
   }
+  /*public isToreader(list : List){
+    this.todolistCollection.doc(this.id).ref
+    return 
+
+  }
+*/
   public  getItems(): Observable<Array<Item>> {
     return this.todolistCollection.doc(this.id).collection<Item>('items').snapshotChanges().pipe( map(actions => {
       return actions.map((a: any) => {

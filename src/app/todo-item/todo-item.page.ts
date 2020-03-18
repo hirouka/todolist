@@ -18,10 +18,12 @@ export class TodoItemPage implements OnInit {
   validationsform: FormGroup;
   errorMessage = '';
   public items: Array<Item> = new Array<Item>();
+  readerbool: boolean;
   // tslint:disable-next-line:no-shadowed-variable
   constructor(private listService: TodoslistService, private authservice: AuthService,  private navCtrl: NavController ,   public afDB: AngularFireDatabase
 
   ) {
+    this.readerbool = this.listService.readerbool;
     this.a = this.authservice.a;
   }
 
@@ -45,6 +47,7 @@ export class TodoItemPage implements OnInit {
 
 
   changeCheckState(item: Item) {
+    console.log('bool',this.readerbool);
     console.log(item.isDone);
     this.listService.update(item);
 
