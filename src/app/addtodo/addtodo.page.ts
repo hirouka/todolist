@@ -66,6 +66,7 @@ startvoca2() {
 }
 
   addList() {
+    console.log('current user is> ', firebase.auth().currentUser.email);
     const list = { title: this.title, owner : firebase.auth().currentUser.email, writers : { idWriter : firebase.auth().currentUser.email } , readers : { }} as List;
     this.listService.addList(list);
     this.router.navigate(['/todoslist']);

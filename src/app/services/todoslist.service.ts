@@ -164,8 +164,9 @@ export class TodoslistService {
    */
   addList(list: List) {
     this.userId = firebase.auth().currentUser.uid;
-    console.log(this.usersCollection.doc(this.userId).get());
-    console.log(this.userId);
+    //console.log(this.usersCollection.doc(this.userId).get());
+    //console.log(this.userId);
+    console.log(list);
     return this.todolistCollection.add(list);
 
   }

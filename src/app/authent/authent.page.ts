@@ -1,3 +1,5 @@
+import { TodoslistService } from './../services/todoslist.service';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Component, OnInit } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { auth } from 'firebase/app';
@@ -24,7 +26,9 @@ export class AuthentPage implements OnInit {
       private afAuth: AngularFireAuth,
       private navCtrl: NavController,
       private authService: AuthService,
-      private formBuilder: FormBuilder
+      private formBuilder: FormBuilder,
+      private fires: AngularFirestore,
+      private todolistservice: TodoslistService
 
   ) { }
  /* email: string;
@@ -122,14 +126,95 @@ export class AuthentPage implements OnInit {
     }
 
     loginwithfacebook() {
-        this.fb.login(['public_profile', 'user_friends', 'email'])
+      this.loginwithfacebook0().then(()=>{
+        this.todolistservice.init_fire();
+
+      })
+       /* this.fb.login(['public_profile', 'user_friends', 'email'])
             .then((res: FacebookLoginResponse) => {
                 this.authService.authenticated = true;
-                this.navCtrl.navigateForward('/todoslist')}
+                console.log('res facbook connect ',res);
+                this.navCtrl.navigateForward('/todoslist');
+            }
                 )
             .catch(e => console.log('Error  Facebook', e));
-        this.fb.logEvent(this.fb.EVENTS.EVENT_NAME_ADDED_TO_CART);
+        this.fb.logEvent(this.fb.EVENTS.EVENT_NAME_ADDED_TO_CART);*/
     }
 
+
+
+    async loginwithfacebook0(): Promise<void> {
+        try {
+          const response = await this.fb.login(["public_profile", "email"]);
+    
+          console.log(response);
+    
+          if (response.authResponse) {
+            // User is signed-in Facebook.
+            const unsubscribe = firebase.auth().onAuthStateChanged(firebaseUser => {
+              unsubscribe();
+              // Check if we are already signed-in Firebase with the correct user.
+              if (!this.isUserEqual(response.authResponse, firebaseUser)) {
+                // Build Firebase credential with the Facebook auth token.
+                const credential = firebase.auth.FacebookAuthProvider.credential(
+                  response.authResponse.accessToken
+                );
+               /* const userId = firebase.auth().currentUser.uid;
+                const userDoc = this.fires.doc<any>('users/' + userId);
+                userDoc.set({
+                    firstName: firebase.auth().currentUser.displayName,
+                    lastName: firebase.auth().currentUser.displayName,
+                    email: firebase.auth().currentUser.email,
+                    id : userId,
+            });*/
+                // Sign in with the credential from the Facebook user.
+                firebase
+                  .auth()
+                  .signInWithCredential(credential)
+                  .catch(error => {
+                    console.log(error);
+                  });
+                 /* const userId = firebase.auth().currentUser.uid;
+                  const userDoc = this.fires.doc<any>('users/' + userId);
+                  userDoc.set({
+                    firstName: firebase.auth().currentUser.displayName,
+                    lastName: firebase.auth().currentUser.displayName,
+                    email: firebase.auth().currentUser.email,
+                    id : userId,
+            });*/
+                  this.authService.authenticated = true;
+
+                  this.navCtrl.navigateForward('/todoslist');
+              } else {
+                // User is already signed-in Firebase with the correct user.
+                console.log("already signed in");
+              }
+            });
+          } else {
+            // User is signed-out of Facebook.
+            firebase.auth().signOut();
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      }
+      isUserEqual(facebookAuthResponse, firebaseUser): boolean {
+        if (firebaseUser) {
+          const providerData = firebaseUser.providerData;
+    
+          providerData.forEach(data => {
+            if (
+              data.providerId === firebase.auth.FacebookAuthProvider.PROVIDER_ID &&
+              data.uid === facebookAuthResponse.userID
+            ) {
+              // We don't need to re-auth the Firebase connection.
+              return true;
+            }
+          });
+        }
+    
+        return false;
+      }
+   
 
 }
