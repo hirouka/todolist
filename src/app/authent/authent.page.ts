@@ -126,10 +126,7 @@ export class AuthentPage implements OnInit {
     }
 
     loginwithfacebook() {
-      this.loginwithfacebook0().then(()=>{
-        this.todolistservice.init_fire();
-
-      })
+      this.loginwithfacebook0();
        /* this.fb.login(['public_profile', 'user_friends', 'email'])
             .then((res: FacebookLoginResponse) => {
                 this.authService.authenticated = true;
@@ -159,32 +156,19 @@ export class AuthentPage implements OnInit {
                 const credential = firebase.auth.FacebookAuthProvider.credential(
                   response.authResponse.accessToken
                 );
-               /* const userId = firebase.auth().currentUser.uid;
-                const userDoc = this.fires.doc<any>('users/' + userId);
-                userDoc.set({
-                    firstName: firebase.auth().currentUser.displayName,
-                    lastName: firebase.auth().currentUser.displayName,
-                    email: firebase.auth().currentUser.email,
-                    id : userId,
-            });*/
                 // Sign in with the credential from the Facebook user.
                 firebase
                   .auth()
                   .signInWithCredential(credential)
+                  .then(()=>{
+                    this.authService.authenticated = true;
+                    this.navCtrl.navigateForward('/todoslist');
+                    this.todolistservice.init_fire();
+                  })
                   .catch(error => {
-                    console.log(error);
+                    console.log(error,'hello facebook');
                   });
-                 /* const userId = firebase.auth().currentUser.uid;
-                  const userDoc = this.fires.doc<any>('users/' + userId);
-                  userDoc.set({
-                    firstName: firebase.auth().currentUser.displayName,
-                    lastName: firebase.auth().currentUser.displayName,
-                    email: firebase.auth().currentUser.email,
-                    id : userId,
-            });*/
-                  this.authService.authenticated = true;
-
-                  this.navCtrl.navigateForward('/todoslist');
+                  
               } else {
                 // User is already signed-in Firebase with the correct user.
                 console.log("already signed in");
@@ -192,10 +176,11 @@ export class AuthentPage implements OnInit {
             });
           } else {
             // User is signed-out of Facebook.
+            console.log("sign out ");
             firebase.auth().signOut();
           }
         } catch (err) {
-          console.log(err);
+          console.log(err ,'err');
         }
       }
       isUserEqual(facebookAuthResponse, firebaseUser): boolean {
