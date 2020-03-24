@@ -11,7 +11,7 @@ before_script:
   - ionic cordova platform add android
 
 script:
-  - ionic cordova build android --prod
+  - ionic cordova build android 
 
 deploy:
   provider: pages
