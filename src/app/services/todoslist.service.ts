@@ -18,18 +18,20 @@ export class TodoslistService {
   private usersCollection: AngularFirestoreCollection<any>;
   private todolistCollectionReader : AngularFirestoreCollection<List>;
   private todolistCollectionWriter : AngularFirestoreCollection<List>;
-  private   unsubtodos:any;
+  public   unsubtodos:any;
   private   unsubReaders:any;
   private   unsubWriter:any;
 
   private todos: Observable<Array<List>>;
   private readers: Observable<Array<List>>;
   private writers: Observable<Array<List>>;
+  private users:  Observable<Array<List>>;
 
   // tslint:disable-next-line:no-shadowed-variable
   public listtodos: Array<List>;
   public listreaders: Array<List>;
   public listwriters: Array<List>;
+  public listusers: Array<List>;
 
 
 
@@ -41,6 +43,8 @@ export class TodoslistService {
     this.listtodos = new Array<List>();
     this.listreaders = new Array<List>();
     this.listwriters = new Array<List>();
+    this.listusers = new Array<any>()
+
    /* this.itemlistCollection = db.collection<Item>('items');
     this.todolistCollection = db.collection<List>('todos', ref => ref.where('iduser', '==', firebase.auth().currentUser.uid));
     this.usersCollection = db.collection<any>('users');
@@ -65,7 +69,7 @@ export class TodoslistService {
     this.todolistCollectionReader = this.db.collection<List>('todos', ref => ref.where('readers', 'array-contains', firebase.auth().currentUser.email));
     this.todolistCollectionWriter = this.db.collection<List>('todos', ref => ref.where('writers', 'array-contains', firebase.auth().currentUser.email));
 
-    this.usersCollection = this.db.collection<any>('users');
+    this.usersCollection = this.db.collection<any>('users', ref => ref.where('email', '==', firebase.auth().currentUser.email));
 
     this.todos = this.todolistCollection.snapshotChanges().pipe(
         map(actions => {
@@ -92,6 +96,15 @@ export class TodoslistService {
             return { id, ...data };
           });
         }));
+    this.users = this.usersCollection.snapshotChanges().pipe(
+      map(actions => {
+        return actions.map((a: any) => {
+          const data = a.payload.doc.data();
+          const id = a.payload.doc.id;
+          return { id, ...data };
+        });
+      })
+    );
     this.unsubtodos = this.todos.subscribe(res => {
       this.listtodos = res;
 
@@ -104,6 +117,12 @@ export class TodoslistService {
     this.unsubWriter= this.writers.subscribe(res => {
       this.listwriters = res;
     });
+
+    this.users.subscribe(res => {
+      this.listusers = res;
+    });
+
+    
   }
   clean_list() {
       this.itemlistCollection = null;
@@ -118,10 +137,6 @@ export class TodoslistService {
    * renvoie une liste de todoList
    */
   public get(): Array<List> {
-    console.log("reades----------->");
-    console.log(this.listreaders);
-    console.log(this.listwriters);
-    console.log("<-<-------->-->");
 
     return this.listtodos;
   }
@@ -131,6 +146,10 @@ export class TodoslistService {
   }
   public getWriters(){
     return this.listwriters;
+  }
+
+  public getUserInfo(){
+    return this.listusers;
   }
   /*public isToreader(list : List){
     this.todolistCollection.doc(this.id).ref

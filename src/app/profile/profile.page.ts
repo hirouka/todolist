@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { TodoslistService } from './../services/todoslist.service';
+import { Component, OnInit, AfterContentInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController } from '@ionic/angular';
 import { AuthService } from '../auth.service';
@@ -8,16 +9,26 @@ import { AuthService } from '../auth.service';
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
 })
-export class ProfilePage {
+export class ProfilePage implements OnInit {
 
   saveSuccess = false;
+  name : string;
 
 
   constructor( private router: Router,
     private auth: AuthService, private alertCtrl: AlertController, 
-    private loading: LoadingController ) { 
-
+    private loading: LoadingController,
+    private todoslistservice: TodoslistService ) {
      
+  }
+ 
+  ngOnInit(): void {
+   
+  }
+
+  getUserInfos(){
+    console.log(this.todoslistservice.getUserInfo(),'----');
+    return this.todoslistservice.getUserInfo();
   }
 
   public save() {

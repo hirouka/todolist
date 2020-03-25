@@ -1,4 +1,4 @@
-import {Component, OnInit, Output} from '@angular/core';
+import {Component, OnInit, Output, AfterViewInit} from '@angular/core';
 import { List } from '../model/list';
 import { TodoslistService } from '../services/todoslist.service';
 import {Observable} from 'rxjs';
@@ -37,7 +37,11 @@ export class TodoslistPage implements OnInit {
   public Listtodos: any;
   public ListReaders: any;
   public ListWriters: any;
+  public filterData : any; 
+  public filterDataR : any;
+  public filterDataW : any;
     lecture= false;
+    search: boolean;
   // tslint:disable-next-line:no-shadowed-variable
   constructor(private listService: TodoslistService, private authservice: AuthService,  private navCtrl: NavController, public route: Router,private camera: Camera
   ) {
@@ -51,9 +55,13 @@ export class TodoslistPage implements OnInit {
 
   ngOnInit(): void {
       console.log(this.listService.get());
+      this.listService.init_fire();
+
       this.Listtodos = this.listService.get();
       this.ListReaders = this.listService.getReaders();
       this.ListWriters = this.listService.getWriters();
+      this.filterData = this.listService.get();
+      
   }
 
     takeSnap() {
@@ -154,5 +162,54 @@ export class TodoslistPage implements OnInit {
     partageEnLecture(){
         this.enLecture  = true;
     }
+
+    getItemssearch(searchbar) {
+       
+        
+        // set q to the value of the searchbar
+        var q = searchbar.srcElement.value;
+        console.log(q);
+        this.search = true; 
+    
+        // if the value is an empty string don't filter the items
+        if (!q) {
+            this.search = false;
+          return;
+        }
+    
+        this.filterData =this.getList().filter((v) => {
+          if(v.title && q) {
+            if (v.title.toLowerCase().indexOf(q.toLowerCase()) > -1) {
+              return true;
+            }
+            return false;
+          }
+        });
+
+        this.filterDataR =this.getListReaders().filter((v) => {
+            if(v.title && q) {
+              if (v.title.toLowerCase().indexOf(q.toLowerCase()) > -1) {
+                return true;
+              }
+              return false;
+            }
+          });
+
+          this.filterDataW =this.getListWriters().filter((v) => {
+            if(v.title && q) {
+              if (v.title.toLowerCase().indexOf(q.toLowerCase()) > -1) {
+                return true;
+              }
+              return false;
+            }
+          });
+    
+        console.log(q, this.filterData);
+        console.log(q, this.filterDataW);
+
+        console.log(q, this.filterDataR);
+
+    
+      }
 }
 

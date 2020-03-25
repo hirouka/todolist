@@ -6,29 +6,39 @@
 
 <ion-content padding>
 
-  <div class="login-box">
+  <div class="login-box" *ngFor="let item of getUserInfos()">
 
     <form (ngSubmit)="save()" #saveForm="ngForm">
       <ion-row>
         <ion-col>
           <ion-list inset>
-            <ion-list-header>Profile </ion-list-header>
-            <ion-avatar class="ion-margin-start">
-              <img src="./avatar.svg">
-            </ion-avatar>
-            <ion-item>
-              <ion-input type="text" placeholder="Name" name="name"  required></ion-input>
+            <ion-list-header>Default</ion-list-header>
+            <div  class="d-flex justify-content-center"> 
+              <ion-avatar class="ion-margin-start">
+                <img src="./avatar.svg">
+              </ion-avatar>
+            </div>
+            
+            <ion-item  >
+              <ion-label  position="floating" color="primary">
+                Nom  
+              </ion-label><br>
+              <ion-input type="text" value="{{item.firstName}}"  name="name"  required></ion-input>
+            </ion-item>
+
+            <ion-item  >
+              <ion-label  position="floating" color="primary">
+                Prénom  
+              </ion-label><br>
+              <ion-input type="text" value="{{item.lastName}}"  name="name"  required></ion-input>
             </ion-item>
 
             <ion-item>
-              <ion-input type="text" placeholder="Email" name="email" required></ion-input>
+              <ion-label  position="floating display-5" color="primary">
+                Email
+              </ion-label>
+              <ion-input type="text" placeholder="{{item.email}}" name="email" required></ion-input>
             </ion-item>
-
-            <ion-item>
-              <ion-input type="password" placeholder="Password" name="password"  ></ion-input>
-              <small></small>
-            </ion-item>
-
           </ion-list>
         </ion-col>
       </ion-row>

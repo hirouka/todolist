@@ -44,9 +44,10 @@ const routes: Routes = [
   {
     path: 'reset-pass',
     loadChildren: () => import('./reset-pass/reset-pass.module').then( m => m.ResetPassPageModule)
-  },  {
+  },
+  {
     path: 'profile',
-    loadChildren: () => import('./profile/profile.module').then( m => m.ProfilePageModule)
+    loadChildren: () => import('./profile/profile.module').then( m => m.ProfilePageModule),canActivate : [AuthGuard]
   }
 
 ];
