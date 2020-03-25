@@ -204,10 +204,9 @@ export class TodoslistPage implements OnInit {
             }
           });
     
-        console.log(q, this.filterData);
+       /* console.log(q, this.filterData);
         console.log(q, this.filterDataW);
-
-        console.log(q, this.filterDataR);
+        console.log(q, this.filterDataR);*/
 
     
       }
