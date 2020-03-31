@@ -1,21 +1,23 @@
 
 <ion-header>
-  <ion-toolbar color="tertiary">
-    <ion-title >
-      Item
-      <!--{{a}}-->
-      <ion-button color="primary"  float-right><ion-icon name="log-out"></ion-icon></ion-button>
-
-    </ion-title>
+  <ion-toolbar color="primary">
+    <ion-buttons color="danger" slot="start">
+      <ion-back-button defaultHref="/todoslist"></ion-back-button>
+    </ion-buttons>
+      <ion-title>
+        Liste des tâches
+      </ion-title>
+      <ion-buttons slot="primary">
+        <ion-button (click)="OpenAddItemPage()">
+          <ion-icon slot="icon-only" name="add"></ion-icon>
+        </ion-button>
+      </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 
 <ion-content fullscreen>
-  <ion-item>
-    <ion-label>
-    </ion-label>
-  </ion-item>
+
   <ion-list>
     <ion-item-sliding *ngFor="let item of items; let i = index">
 <!--
@@ -25,6 +27,7 @@
           <ion-checkbox (ionChange)="changeCheckState(item)" [disabled]="readerbool"  [(ngModel)]="item.isDone" color="danger" slot="start"></ion-checkbox>
             <ion-label>
             <h2> tâche : {{item.title}}</h2>
+            <p>  {{item.description}}</p>
           </ion-label>
         </ion-item>
 <!--
@@ -43,8 +46,3 @@
   </section>
 </ion-content>
 
-<ion-footer>
-  <ion-toolbar *ngIf="!readerbool" >
-    <ion-button float-right primary large expand="forward" [routerDirection]="['root']"  [routerLink]="['/additem']"> <ion-icon name="add-circle"></ion-icon></ion-button>
-  </ion-toolbar>
-</ion-footer>

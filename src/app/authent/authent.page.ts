@@ -10,6 +10,7 @@ import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
 import {resolve} from '@angular-devkit/core';
 import * as firebase from 'firebase';
+import { GooglePlus } from '@ionic-native/google-plus/ngx';
 
 
 @Component({
@@ -28,7 +29,8 @@ export class AuthentPage implements OnInit {
       private authService: AuthService,
       private formBuilder: FormBuilder,
       private fires: AngularFirestore,
-      private todolistservice: TodoslistService
+      private todolistservice: TodoslistService,
+      private googlePlus: GooglePlus
 
   ) { }
  /* email: string;
@@ -110,7 +112,7 @@ export class AuthentPage implements OnInit {
     this.navCtrl.navigateForward('/register');
   }
 
-  loginwithgoogle() {
+  loginwithgooglee() {
         this.gooleprovider  = new auth.GoogleAuthProvider();
         this.authService.authenticated = false;
         this.afAuth.auth.signInWithPopup(this.gooleprovider).then((r) => { this.authService.authenticated = true;
@@ -118,6 +120,19 @@ export class AuthentPage implements OnInit {
         });
 
     }
+
+    loginwithgoogle() {
+      this.googlePlus.login({})
+        .then(res =>
+          {
+            this.authService.authenticated = true;
+            this.navCtrl.navigateForward('/todoslist');
+            console.log(res);
+          } )
+        .catch(err => console.log('err',err));
+
+  }
+
 
     resetPassword(value: any): any {
         this.navCtrl.navigateForward('/reset-pass');

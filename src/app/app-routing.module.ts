@@ -38,6 +38,10 @@ const routes: Routes = [
     loadChildren: () => import('./share-todo/share-todo.module').then( m => m.ShareTodoPageModule), canActivate : [AuthGuard]
   },
   {
+    path: 'shared-lists',
+    loadChildren: () => import('./shared-lists/shared-lists.module').then(m => m.SharedListsPageModule),canActivate : [AuthGuard]
+},
+  {
     path: 'camera',
     loadChildren: () => import('./camera/camera.module').then( m => m.CameraPageModule)
   },
@@ -47,7 +51,7 @@ const routes: Routes = [
   },
   {
     path: 'profile',
-    loadChildren: () => import('./profile/profile.module').then( m => m.ProfilePageModule),canActivate : [AuthGuard]
+    loadChildren: () => import('./profile/profile.module').then( m => m.ProfilePageModule), canActivate : [AuthGuard]
   }
 
 ];

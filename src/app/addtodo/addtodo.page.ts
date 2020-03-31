@@ -1,3 +1,4 @@
+import { HelperService } from './../services/helper.service';
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { Item } from '../model/item';
@@ -17,9 +18,11 @@ export class AddtodoPage implements OnInit {
   hello: string;
   desc: string;
   matchess: string[];
+  showAddTodoSpinner = false;
 
   constructor(private listService: TodoslistService,
-              private router: Router , private speechRecognition: SpeechRecognition,private cd: ChangeDetectorRef) { }
+              private router: Router ,
+              private helperService: HelperService, private speechRecognition: SpeechRecognition,private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.speechRecognition.hasPermission()
@@ -66,10 +69,19 @@ startvoca2() {
 }
 
   addList() {
-    console.log('current user is> ', firebase.auth().currentUser.email);
-    const list = { title: this.title, owner : firebase.auth().currentUser.email, writers : { idWriter : firebase.auth().currentUser.email } , readers : { }} as List;
-    this.listService.addList(list);
-    this.router.navigate(['/todoslist']);
+    try {
+      console.log('current user is> ', firebase.auth().currentUser.email);
+      const list = { title: this.title, owner : firebase.auth().currentUser.email, writers : { idWriter : firebase.auth().currentUser.email } , readers : { }} as List;
+      this.listService.addList(list);
+      this.showAddTodoSpinner = false;
+      this.helperService.presentToast('Lise ajoutée!');
+      this.router.navigate(['/todoslist']);
+    } catch (error) {
+      console.log('in add todo', error);
+      this.helperService.presentToast(error.message);
+      this.showAddTodoSpinner = false;
+    }
+ 
   }
 
   retourPagetodo() {

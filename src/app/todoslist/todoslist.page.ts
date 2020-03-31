@@ -1,9 +1,10 @@
+import { HelperService } from './../services/helper.service';
 import {Component, OnInit, Output, AfterViewInit} from '@angular/core';
 import { List } from '../model/list';
 import { TodoslistService } from '../services/todoslist.service';
 import {Observable} from 'rxjs';
 import {AuthService} from '../auth.service';
-import {NavController} from '@ionic/angular';
+import {NavController, IonItemSliding} from '@ionic/angular';
 import {FormGroup} from '@angular/forms';
 import {Router} from '@angular/router';
 import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
@@ -23,6 +24,8 @@ export class TodoslistPage implements OnInit {
   enLecture = true; 
   id: string;
     capturedSnapURL:string;
+    todoDetail: any = {};
+    showDeleteTodoSpinner = false;
 
     cameraOptions: CameraOptions = {
         quality: 20,
@@ -43,7 +46,11 @@ export class TodoslistPage implements OnInit {
     lecture= false;
     search: boolean;
   // tslint:disable-next-line:no-shadowed-variable
-  constructor(private listService: TodoslistService, private authservice: AuthService,  private navCtrl: NavController, public route: Router,private camera: Camera
+  constructor(private helperService: HelperService,
+    private listService: TodoslistService,
+    private authservice: AuthService, 
+    private navCtrl: NavController,
+    public route: Router,private camera: Camera
   ) {
     this.itmbool = false;
     this.a = this.authservice.a;
@@ -132,13 +139,21 @@ export class TodoslistPage implements OnInit {
             });
 
     }
-    Afficherhtml(id: string) {
+    AfficherTodo(id: string) {
+      console.log("okokoko");
         this.listService.readerbool = false;
         this.listService.id  = id;
         this.route.navigate(['/todo-item']);
 
 
     }
+
+    goShare(){
+      this.route.navigate(['/shared-lists']);
+    }
+    AddTodo() {
+      this.route.navigate(['/addtodo']);
+  }
     Afficherhtml2(id: string , reader : string) {
         this.listService.id  = id;
         this.listService.readerbool = true;
@@ -146,7 +161,39 @@ export class TodoslistPage implements OnInit {
 
 
     }
+    deleteTodo(id: string, todoTitle:string) {
+      this.helperService.presentAlertConfirm(
+          'Suprimer la liste ',
+          `Vous êtes de vouloir supprimer la liste:  ${todoTitle} ?`,
+          [
+              {
+                  text: 'NON',
+                  role: 'cancel',
+                  handler: (blah) => {
+                  }
+              }, {
+              text: 'OUI',
+              handler: async () => {
+                  try {
+                      this.showDeleteTodoSpinner = true;
+                      await this.listService.deleteTodo('todos', id);
+                      this.helperService.presentToast('Liste supprimee!!');
+                      this.showDeleteTodoSpinner = false;
+                      this.route.navigate(['/todoslist']);
+                  } catch (error) {
+                      this.helperService.presentToast(error.message);
+                      console.log('Erreur de suppression ', error);
+                      this.showDeleteTodoSpinner = false;
+                  }
+              }
+          }
+          ]
+      );
+  }
 
+
+
+  
     shareTodo(id: string) {
         this.listService.id = id;
         this.route.navigate(['/share-todo']);

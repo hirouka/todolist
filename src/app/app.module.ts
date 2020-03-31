@@ -1,3 +1,4 @@
+import { SharedModule } from './shared/shared.module';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
@@ -27,6 +28,8 @@ import { Camera } from '@ionic-native/camera/ngx';
 import {ResetPassPage} from './reset-pass/reset-pass.page';
 import {ResetPassPageModule} from './reset-pass/reset-pass.module';
 import { SpeechRecognition } from '@ionic-native/speech-recognition/ngx';
+import { GooglePlus } from '@ionic-native/google-plus/ngx';
+import { File } from '@ionic-native/file/ngx';
 firebase.initializeApp(environment.firebase);
 
 // @ts-ignore
@@ -39,6 +42,7 @@ firebase.initializeApp(environment.firebase);
     AngularFireAuthModule,
     AngularFireDatabaseModule,
     AngularFirestoreModule,
+    SharedModule ,
     AngularFireStorageModule, ReactiveFormsModule, ResetPassPageModule],
 
   providers: [
@@ -50,6 +54,8 @@ firebase.initializeApp(environment.firebase);
     Facebook,
     SpeechRecognition,
     Camera,
+    File,
+    GooglePlus,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

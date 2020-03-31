@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import {Component, Input, OnInit} from '@angular/core';
 import {FormGroup} from '@angular/forms';
 import {List} from '../model/list';
@@ -20,7 +21,7 @@ export class TodoItemPage implements OnInit {
   public items: Array<Item> = new Array<Item>();
   readerbool: boolean;
   // tslint:disable-next-line:no-shadowed-variable
-  constructor(private listService: TodoslistService, private authservice: AuthService,  private navCtrl: NavController ,   public afDB: AngularFireDatabase
+  constructor(private listService: TodoslistService, private authservice: AuthService,  private navCtrl: NavController ,  private router: Router,  public afDB: AngularFireDatabase
 
   ) {
     this.readerbool = this.listService.readerbool;
@@ -37,7 +38,9 @@ export class TodoItemPage implements OnInit {
     return this.listService.get();
   }
   // RETOUR LIST DE ITEMS
-
+  OpenAddItemPage() {
+    this.router.navigate(['/additem']);
+  }
 
   delete(pos: number) {
     // tslint:disable-next-line:no-shadowed-variable

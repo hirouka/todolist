@@ -1,55 +1,58 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="todoslist"></ion-back-button>
+    </ion-buttons>
     <ion-title>profile</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
+    <ion-row class="ion-justify-content-center" *ngFor="let item of getUserInfos()" >
+      <ion-col size="12" sizeXs="12" sizeMd="6" sizeLg="6">
+        <ion-list>
+          <ion-card-header>
+  
+          </ion-card-header>
+          <ion-card-content>
+            <ion-row>
+              <ion-col size="8">
+                <ion-avatar>
+                  <img   *ngIf="!capturedSnapURL" [src]="imgLoad">
+                  <ion-img  *ngIf="capturedSnapURL" [src]="capturedSnapURL"></ion-img>
+                </ion-avatar>
+                
+              </ion-col>
+              <ion-col size="12">
+                <ion-item>
+                  <ion-label>
+                    Nom
+                  </ion-label>
+                  {{item.firstName || '-'}}
+                </ion-item>
 
-  <div class="login-box" *ngFor="let item of getUserInfos()">
+                <ion-item>
+                  <ion-label>
+                    Prénom
+                  </ion-label>
+                  {{item.lastName || '-'}}
+                </ion-item>
+                <ion-item>
+                  <ion-label>
+                    {{item.email}}
+                  </ion-label>
+                  
+                </ion-item>
+              </ion-col>
+              <ion-col size="12">
+                <ion-button color="danger" expand="block" (click)="photoprofile()">Changer la photo de profile</ion-button>
 
-    <form (ngSubmit)="save()" #saveForm="ngForm">
-      <ion-row>
-        <ion-col>
-          <ion-list inset>
-            <ion-list-header>Default</ion-list-header>
-            <div  class="d-flex justify-content-center"> 
-              <ion-avatar class="ion-margin-start">
-                <img src="./avatar.svg">
-              </ion-avatar>
-            </div>
-            
-            <ion-item  >
-              <ion-label  position="floating" color="primary">
-                Nom  
-              </ion-label><br>
-              <ion-input type="text" value="{{item.firstName}}"  name="name"  required></ion-input>
-            </ion-item>
-
-            <ion-item  >
-              <ion-label  position="floating" color="primary">
-                Prénom  
-              </ion-label><br>
-              <ion-input type="text" value="{{item.lastName}}"  name="name"  required></ion-input>
-            </ion-item>
-
-            <ion-item>
-              <ion-label  position="floating display-5" color="primary">
-                Email
-              </ion-label>
-              <ion-input type="text" placeholder="{{item.email}}" name="email" required></ion-input>
-            </ion-item>
-          </ion-list>
-        </ion-col>
-      </ion-row>
-
-      <ion-row>
-        <ion-col class="signup-col">
-          <ion-button class="submit-btn" full type="submit" [disabled]="!saveForm.form.valid">Save</ion-button>
-        </ion-col>
-      </ion-row>
-
-    </form>
-  </div>
+                <ion-button color="danger" expand="block" (click)="logout()">Logout</ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+        </ion-list>
+      </ion-col>
+    </ion-row>
 
 </ion-content>

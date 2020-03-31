@@ -1,220 +1,99 @@
-<ion-menu contentId="content1" side="start">
-  <ion-header>
+
+
+  <ion-header >
     <ion-toolbar>
-      <ion-title>Menu</ion-title>
+        <ion-buttons slot="start">
+            <ion-menu-button menu="menu_1"></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Mes Listes de tâches  </ion-title>
+        <ion-buttons slot="primary">
+            <ion-button (click)="AddTodo()">
+                <ion-icon slot="icon-only" name="add"></ion-icon>
+            </ion-button>
+        </ion-buttons>
     </ion-toolbar>
-  </ion-header>
-  <ion-content>
-    <ion-list>
-      <ion-item (click)="goToprofile()">
-        <ion-icon name="mail" slot="start"></ion-icon>
-        <ion-label>Profile</ion-label>
-      </ion-item>
-      <ion-item>
-        <ion-icon name="paper-plane" slot="start"></ion-icon>
-        <ion-label>Mes liste crée par moi</ion-label>
-      </ion-item>
-      <ion-item>
-        <ion-icon name="heart" slot="start" (click)="partageEnLecture()"></ion-icon>
-        <ion-label>partagés en lecture</ion-label>
-      </ion-item>
-      <ion-item>
-        <ion-icon name="archive" slot="start"></ion-icon>
-        <ion-label>Partagé en eciture</ion-label>
-      </ion-item>
+</ion-header>
 
-    </ion-list>
-  </ion-content>
-</ion-menu>
-
-<ion-content id="content1">
-  <ion-header>
-    <ion-toolbar color="tertiary">
-      <ion-title>
-
-        Tâches
-        <!--{{a}}-->
-        <ion-button color="transparent" float-right (click)="logOut()">
-          <ion-icon name="log-out"></ion-icon>
-        </ion-button>
-
-      </ion-title>
-      <ion-buttons slot="start">
-        <ion-menu-button autoHide="false"></ion-menu-button>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-header>
-
-
-  <ion-content fullscreen>
+<ion-content class="ion-padding">
     <ion-searchbar placeholder="Chercher" (ionInput)="getItemssearch($event)"></ion-searchbar>
-    <ion-list>
-      <ion-item>
-        <ion-label color="secondary"> Mes listes à moi</ion-label>
-      </ion-item>
-      <ion-list *ngIf="search ; else notsearch" >
-        <ion-item-sliding *ngFor="let item of filterData; let i = index">
-          <ion-item>
-            <ion-label (click)="Afficherhtml(item?.id)">
-              <h2>{{item?.title}}</h2>
-            </ion-label>
-            <ion-button color="dark" (click)=shareTodo(item?.id)>
-              <ion-icon name="share"></ion-icon>
-            </ion-button>
-            <ion-button (click)="takeSnap()">
-              Take Snap 
-            </ion-button>
-            <ion-button (click)="upload(item?.id)"></ion-button>
-          </ion-item>
-          <ion-item-options side="end">
-            <ion-item-option color="danger" (click)="delete(i)">
-              <ion-icon slot="top" name="trash"></ion-icon>
-            </ion-item-option>
-          </ion-item-options>
-        </ion-item-sliding>
-      </ion-list>
-      
-    </ion-list>
+    <ion-refresher slot="fixed" (ionRefresh)="getList($event)">
+        <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+    <ion-grid>
+        <ion-row class="ion-justify-content-center">
+            <ion-col size="12" sizeSm="8" offsetSm="2">
+                <ion-list *ngIf="search ; else notsearch" >
+                    <ion-item-sliding *ngFor="let todo of filterData" #slidingItem>
+                        <ion-item  detail="true"  >
+                            <ion-label (click)="AfficherTodo(todo.id)">
+                                {{todo.title}}
+                            </ion-label>
+                            
+                            <ion-item slot="end">
+                                <ion-button color="dark" slot="end" (click)=shareTodo(todo?.id)>
+                                    <ion-icon name="share"></ion-icon>
+                                  </ion-button>  
+                            </ion-item>
+                        </ion-item>
+                       
+                        <ion-item-options side="end">
+                            
+                            <ion-item-option color="danger" (click)="deleteTodo(todo.id,todo.title)">
+                                <ion-icon slot="top" name="trash"></ion-icon>
+                            </ion-item-option>
+                        </ion-item-options>
+                    </ion-item-sliding>
+                </ion-list>
+
+            </ion-col>
+        </ion-row>
+    </ion-grid>
     
-
-    <ion-list *ngIf="getListReaders().length>0 ; else contenu_pas_bon">
-      <ion-item>
-        <ion-label color="danger">
-          Partagée(s) avec moi en Lecture
-        </ion-label>
-      </ion-item>
-      <ion-list  *ngIf="search ; else notsearchR" >
-        <ion-item-sliding *ngFor="let item of filterDataR; let i = index">
-          <ion-item>
-            <ion-label (click)="Afficherhtml2(item?.id,'reader')">
-              <h2> {{ item?.title}}</h2>
-            </ion-label>
-            <ion-button color="dark" (click)=shareTodo(item?.id)>
-              <ion-icon name="share"></ion-icon>
-            </ion-button>
-          </ion-item>
-  
-        </ion-item-sliding>
-      </ion-list>
-      
-    </ion-list>
-
-
-    <ion-list *ngIf="getListWriters().length>0; else contenu_pas_vide">
-      <ion-item>
-        <ion-label color="danger">
-          Partagée(s) avec moi en Ecriture
-        </ion-label>
-      </ion-item>
-      <ion-list *ngIf="search ; else notsearchW">
-        <ion-item-sliding *ngFor="let item of filterDataW; let i = index">
-          <ion-item>
-            <ion-label (click)="Afficherhtml(item?.id)">
-              <h2> {{ item?.title}}</h2>
-            </ion-label>
-            <!-- <ion-button color="dark" (click)=shareTodo(item?.id)>
-              <ion-icon name="share"></ion-icon>
-            </ion-button>-->
-          </ion-item>
-  
-  
-          <ion-item-options side="end">
-  
-          </ion-item-options>
-        </ion-item-sliding>
-      </ion-list>
-     
-    </ion-list>
-
-  </ion-content>
-
 </ion-content>
 
+
+
+
+  
   <ion-footer>
-    <ion-toolbar>
-      <ion-button float-right color="tertiary" large expand="forward" [routerDirection]="['root']"
-        [routerLink]="['/addtodo']">
-        <ion-icon name="add-circle"></ion-icon>
-      </ion-button>
-    </ion-toolbar>
-  </ion-footer>
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button tab="/">
+      <ion-label>My List</ion-label>
+      <ion-icon name="calendar"></ion-icon>
+    </ion-tab-button>
 
+    <ion-tab-button (click)="goShare()">
+      <ion-label>Shared</ion-label>
+      <ion-icon name="share"></ion-icon>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-footer>
 
-  <ng-template #contenu_pas_bon>
-    <ion-item>
-      <ion-label color="danger">
-        Partagé avec moi en Lecture
-      </ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label>
-        (vide)
-      </ion-label>
-    </ion-item>
-  </ng-template>
+<ng-template #notsearch>
+   
+    <ion-item-sliding *ngFor="let todo of getList(); let i = index">
+       
+            
+            <ion-item  detail="true"  >
+                <ion-label (click)="AfficherTodo(todo.id)">
+                    {{todo.title}}
+                </ion-label>
+                
+                <ion-item slot="end">
+                    <ion-button color="dark" slot="end" (click)=shareTodo(todo?.id)>
+                        <ion-icon name="share"></ion-icon>
+                      </ion-button>  
+                </ion-item>
+            </ion-item>
+           
+            <ion-item-options side="end">
+                
+                <ion-item-option color="danger" (click)="deleteTodo(todo.id,todo.title)">
+                    <ion-icon slot="top" name="trash"></ion-icon>
+                </ion-item-option>
+            </ion-item-options>
 
-  <ng-template #contenu_pas_vide>
-    <ion-item>
-      <ion-label color="danger">
-        Partagé avec moi en Ecriture
-      </ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-label>
-        (vide)
-      </ion-label>
-    </ion-item>
-  </ng-template>
-
-  <ng-template #notsearch>
-    <ion-item-sliding *ngFor="let item of getList(); let i = index">
-      <ion-item>
-        <ion-label (click)="Afficherhtml(item?.id)">
-          <h2>{{item?.title}}</h2>
-        </ion-label>
-        <ion-button color="dark" (click)=shareTodo(item?.id)>
-          <ion-icon name="share"></ion-icon>
-        </ion-button>
-        <ion-button (click)="takeSnap()">
-          Take Snap
-        </ion-button>
-        <ion-button (click)="upload(item?.id)"></ion-button>
-      </ion-item>
-      <ion-item-options side="end">
-        <ion-item-option color="danger" (click)="delete(i)">
-          <ion-icon slot="top" name="trash"></ion-icon>
-        </ion-item-option>
-      </ion-item-options>
-    </ion-item-sliding>
-  </ng-template>
-
-  <ng-template #notsearchR>
-    <ion-item-sliding *ngFor="let item of getListReaders(); let i = index">
-      <ion-item>
-        <ion-label (click)="Afficherhtml2(item?.id,'reader')">
-          <h2>{{item?.title}}</h2>
-        </ion-label>
-        <ion-button color="dark" (click)=shareTodo(item?.id)>
-          <ion-icon name="share"></ion-icon>
-        </ion-button>
-      </ion-item>
-    </ion-item-sliding>
-  </ng-template>
-
-  <ng-template #notsearchW>
-    <ion-item-sliding *ngFor="let item of getListWriters(); let i = index">
-      <ion-item>
-        <ion-label (click)="Afficherhtml(item?.id)">
-          <h2> {{ item?.title}}</h2>
-        </ion-label>
-        <!-- <ion-button color="dark" (click)=shareTodo(item?.id)>
-          <ion-icon name="share"></ion-icon>
-        </ion-button>-->
-      </ion-item>
-
-
-      <ion-item-options side="end">
-
-      </ion-item-options>
+           
+        
     </ion-item-sliding>
   </ng-template>

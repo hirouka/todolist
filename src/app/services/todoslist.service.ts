@@ -11,6 +11,9 @@ import * as admin from 'firebase-admin';
 
 @Injectable()
 export class TodoslistService {
+  private _rootRef: any;
+  
+ 
 
 
   private todolistCollection: AngularFirestoreCollection<List>;
@@ -44,7 +47,7 @@ export class TodoslistService {
     this.listreaders = new Array<List>();
     this.listwriters = new Array<List>();
     this.listusers = new Array<any>()
-
+    this._rootRef = firebase.database().ref('/users');
    /* this.itemlistCollection = db.collection<Item>('items');
     this.todolistCollection = db.collection<List>('todos', ref => ref.where('iduser', '==', firebase.auth().currentUser.uid));
     this.usersCollection = db.collection<any>('users');
@@ -141,6 +144,50 @@ export class TodoslistService {
     return this.listtodos;
   }
 
+  public shareTodoList(todoList, email): Promise<any>{
+    return this._rootRef.orderByChild('email')
+      .equalTo(email)
+      .once("value")
+      .then((data) => {
+
+        let message = ''
+
+        if(data.val()==null)
+          message = email + ' ne correspond à aucun utilisateur répertorié';
+
+        data.forEach((snapChild) => {
+
+          let ownListsTemp = data.val()[snapChild.key]['own'];
+          let shareListsTemp = data.val()[snapChild.key]['share'];
+
+          if(typeof ownListsTemp == 'undefined')
+            ownListsTemp = [];
+          if(typeof shareListsTemp == 'undefined')
+            shareListsTemp = [];
+
+          if(shareListsTemp.indexOf(todoList.uuid) != -1){
+            message = 'Cette liste est déjà partagée avec ' + email;
+          }else if(ownListsTemp.indexOf(todoList.uuid) != -1){
+            message = email + ' est déjà propriétaire de cette liste';
+          }else{
+            shareListsTemp.push(todoList.uuid);
+            message = 'Succès du partage de la liste avec ' + email;
+          }
+
+          let pathUser = '/users/' + snapChild.key;
+          let userRef = firebase.database().ref(pathUser);
+
+          userRef.set({
+            own: ownListsTemp,
+            share: shareListsTemp,
+            email: email
+          });
+
+        });
+
+        return message;
+      })
+  }
   public getReaders(){
     return this.listreaders;
   }
@@ -176,6 +223,15 @@ export class TodoslistService {
     console.log(list);
     return this.todolistCollection.doc(list.id).delete();
   }
+
+  async deleteTodo(collectionName, docId) {
+    try {
+        const result = await this.db.doc(`${collectionName}/${docId}`).delete();
+        return result;
+    } catch (error) {
+        throw new Error(error);
+    }
+}
 
   /**
    * ajoute une liste
@@ -224,6 +280,8 @@ export class TodoslistService {
   }
 
     addUserReader(id: string, mail: string) {
+      const tab = this.todolistCollection.doc(id);
+      console.log(tab);
       return this.todolistCollection.doc(id).set(
           {
            readers:  firebase.firestore.FieldValue.arrayUnion(mail)

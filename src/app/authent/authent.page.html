@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar hideBackButton color="tertiary">
+  <ion-toolbar hideBackButton color="primary">
     <ion-title>Login</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -36,13 +36,13 @@
     </ion-item>
     <ion-button color="black" expand="block" shape="round" fill="outline" class="submit-btn" type="submit"  [disabled]="!validationsform.valid" >Connexion</ion-button>
     <br>
-    <ion-button color="tertiary" expand="block" shape="round" (click)="goToRegisterPage()" >Inscription</ion-button>
+    <ion-button color="primary" expand="block" shape="round" (click)="goToRegisterPage()" >Inscription</ion-button>
     <ion-item lines="none">
       <ion-label color="primary" text-center>Ou bien </ion-label>
     </ion-item>
    <!-- <ion-button  class="submit-btn" type="submit"  [disabled]="!validationsform.valid">Log In</ion-button>-->
-    <ion-button color="tertiary" expand="block" shape="round" (click)="loginwithgoogle()" >Google <ion-icon name="logo-google"></ion-icon></ion-button>
-    <ion-button color="tertiary" expand="block" shape="round" (click)="loginwithfacebook()">Facebook<ion-icon name="logo-facebook"></ion-icon></ion-button>
+    <ion-button color="primary" expand="block" shape="round" (click)="loginwithgoogle()" >Google <ion-icon name="logo-google"></ion-icon></ion-button>
+    <ion-button color="primary" expand="block" shape="round" (click)="loginwithfacebook()">Facebook<ion-icon name="logo-facebook"></ion-icon></ion-button>
 
 
    <!-- <ion-button (click)="loginwithgoogle()" > <ion-icon name="logo-google" ></ion-icon></ion-button>
