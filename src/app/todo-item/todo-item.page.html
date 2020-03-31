@@ -23,7 +23,15 @@
 <!--
       <div *ngFor="let it of item.items; let i = index">
 -->
-        <ion-item>
+        <ion-item *ngIf="!item.isDone" >
+          <ion-checkbox (ionChange)="changeCheckState(item)" [disabled]="readerbool"  [(ngModel)]="item.isDone" color="danger" slot="start"></ion-checkbox>
+            <ion-label>
+            <h2> tâche : {{item.title}}</h2>
+            <p>  {{item.description}}</p>
+          </ion-label>
+        </ion-item>
+
+        <ion-item *ngIf="item.isDone" style="text-decoration:line-through;" >
           <ion-checkbox (ionChange)="changeCheckState(item)" [disabled]="readerbool"  [(ngModel)]="item.isDone" color="danger" slot="start"></ion-checkbox>
             <ion-label>
             <h2> tâche : {{item.title}}</h2>

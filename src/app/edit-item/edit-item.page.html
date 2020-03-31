@@ -38,17 +38,25 @@
               
             </ion-item>
           </ion-list>
-          <div class="ion-padding">
-            <ion-button expand="block" type="submit" (click)="RetourSurItems()" class="ion-no-margin" [disabled]="!addListForm.valid">
+         
+            
+        
+          <ion-button color="danger" expand="block" shape="round" class="submit-btn" fill="outline" [disabled]="!addListForm.valid">
+            Ajouter</ion-button>
+
+            <ion-button  color="danger" expand="block" shape="round" class="submit-btn" (click)="RetourSurItems()" class="ion-no-margin" [disabled]="!addListForm.valid">
               Annuler</ion-button>
-            <ion-button expand="block" type="submit" class="ion-no-margin" [disabled]="!addListForm.valid">
-              Add item</ion-button>
-          </div>
+         
+            
+          
+            
         </form>
       </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>
+
+
 
 
 
