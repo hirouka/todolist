@@ -25,9 +25,6 @@
               <ion-label (click)="Afficherhtml2(item?.id,'reader')">
                 <h2> {{ item?.title}}</h2>
               </ion-label>
-              <ion-button color="dark" (click)=shareTodo(item?.id)>
-                <ion-icon name="share"></ion-icon>
-              </ion-button>
             </ion-item>
     
           </ion-item-sliding>
@@ -45,7 +42,7 @@
         <ion-list *ngIf="search ; else notsearchW">
           <ion-item-sliding *ngFor="let item of filterDataW; let i = index">
             <ion-item>
-              <ion-label (click)="Afficherhtml(item?.id)">
+              <ion-label (click)="AfficherTodo(item?.id)">
                 <h2> {{ item?.title}}</h2>
               </ion-label>
               <!-- <ion-button color="dark" (click)=shareTodo(item?.id)>
@@ -124,7 +121,7 @@
   <ng-template #notsearchW>
     <ion-item-sliding *ngFor="let item of getListWriters(); let i = index">
       <ion-item>
-        <ion-label (click)="Afficherhtml(item?.id)">
+        <ion-label (click)="AfficherTodo(item?.id)">
           <h2> {{ item?.title}}</h2>
         </ion-label>
         <!-- <ion-button color="dark" (click)=shareTodo(item?.id)>
