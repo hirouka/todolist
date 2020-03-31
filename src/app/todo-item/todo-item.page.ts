@@ -1,3 +1,4 @@
+import { HelperService } from './../services/helper.service';
 import { Router } from '@angular/router';
 import {Component, Input, OnInit} from '@angular/core';
 import {FormGroup} from '@angular/forms';
@@ -20,10 +21,18 @@ export class TodoItemPage implements OnInit {
   errorMessage = '';
   public items: Array<Item> = new Array<Item>();
   readerbool: boolean;
+  todoItemsId = '';
+
   // tslint:disable-next-line:no-shadowed-variable
-  constructor(private listService: TodoslistService, private authservice: AuthService,  private navCtrl: NavController ,  private router: Router,  public afDB: AngularFireDatabase
+  constructor(private listService: TodoslistService, 
+              private authservice: AuthService, 
+              private navCtrl: NavController ,
+              private router: Router,
+              private helperService: HelperService,
+              public afDB: AngularFireDatabase
 
   ) {
+    
     this.readerbool = this.listService.readerbool;
     this.a = this.authservice.a;
   }
@@ -41,6 +50,36 @@ export class TodoItemPage implements OnInit {
   OpenAddItemPage() {
     this.router.navigate(['/additem']);
   }
+  deleteItem(itemId: string,itemTitle:string,) {
+    this.helperService.presentAlertConfirm(
+        'Supprimer la tâche ',
+        `Etes vous sûr de vouloir supprimer  ${itemTitle}`,
+        [
+            {
+                text: 'NON',
+                role: 'cancel',
+                handler: (blah) => {
+                }
+            }, {
+            text: 'OUI',
+            handler: async () => {
+                try {
+                    await this.listService.deleteItem(itemId,this.listService.id);
+                    this.helperService.presentToast('Têche supprimée!');
+                } catch (error) {
+                    this.helperService.presentToast(error.message);
+                    console.log('Erreur lors de la suppression', error);
+                }
+            }
+        }
+        ]
+    );
+}
+
+EditItem(item: Item,itemTitle:string){
+  this.listService.item = item;
+  this.router.navigate(['/edit-item']);
+}
 
   delete(pos: number) {
     // tslint:disable-next-line:no-shadowed-variable

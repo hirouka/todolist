@@ -34,7 +34,10 @@
       </div>
 -->
       <ion-item-options  *ngIf="!readerbool" side="end" >
-        <ion-item-option color="danger">
+        <ion-item-option color="success" (click)="EditItem(item,item.title)">
+          <ion-icon slot="top" name="create"></ion-icon>
+        </ion-item-option>
+        <ion-item-option color="danger" (click)="deleteItem(item.id,item.title)">
           <ion-icon slot="top" name="trash"></ion-icon>
         </ion-item-option>
       </ion-item-options>

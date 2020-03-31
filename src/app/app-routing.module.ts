@@ -52,7 +52,11 @@ const routes: Routes = [
   {
     path: 'profile',
     loadChildren: () => import('./profile/profile.module').then( m => m.ProfilePageModule), canActivate : [AuthGuard]
+  },  {
+    path: 'edit-item',
+    loadChildren: () => import('./edit-item/edit-item.module').then( m => m.EditItemPageModule)
   }
+
 
 ];
 

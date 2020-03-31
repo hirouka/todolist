@@ -39,6 +39,7 @@ export class TodoslistService {
 
 
   id: string;
+  item: Item;
   private userId: string;
     readerbool: boolean;
 
@@ -265,6 +266,15 @@ export class TodoslistService {
   }
 */
 
+async deleteItem(itemId, todoItemsId) {
+  try {
+      const result = await this.db.doc(`todos/${todoItemsId}/items/${itemId}`).delete();
+      return result;
+  } catch (error) {
+      throw new Error(error);
+  }
+}
+
 
   update(item: Item) {
     console.log('on est dans update');
@@ -279,6 +289,20 @@ export class TodoslistService {
 
   }
 
+
+  editItem(title: string , desc: string) {
+    console.log('on est dans update');
+    return this.todolistCollection.doc(this.id).collection('items').doc(this.item.id).set(
+        {
+          title : title,
+          description : desc
+        },
+        {
+          merge: true
+        }
+    );
+
+  }
     addUserReader(id: string, mail: string) {
       const tab = this.todolistCollection.doc(id);
       console.log(tab);
