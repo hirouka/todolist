@@ -52,8 +52,8 @@ export class TodoItemPage implements OnInit {
   }
   deleteItem(itemId: string,itemTitle:string,) {
     this.helperService.presentAlertConfirm(
-        'Supprimer la tâche ',
-        `Etes vous sûr de vouloir supprimer  ${itemTitle}`,
+        'Supprimer une tâche ',
+        `Êtes-vous sûr(e) de vouloir supprimer  ${itemTitle}`,
         [
             {
                 text: 'NON',
@@ -65,7 +65,7 @@ export class TodoItemPage implements OnInit {
             handler: async () => {
                 try {
                     await this.listService.deleteItem(itemId,this.listService.id);
-                    this.helperService.presentToast('Têche supprimée!');
+                    this.helperService.presentToast('Tâche supprimée!');
                 } catch (error) {
                     this.helperService.presentToast(error.message);
                     console.log('Erreur lors de la suppression', error);

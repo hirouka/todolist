@@ -145,50 +145,7 @@ export class TodoslistService {
     return this.listtodos;
   }
 
-  public shareTodoList(todoList, email): Promise<any>{
-    return this._rootRef.orderByChild('email')
-      .equalTo(email)
-      .once("value")
-      .then((data) => {
-
-        let message = ''
-
-        if(data.val()==null)
-          message = email + ' ne correspond à aucun utilisateur répertorié';
-
-        data.forEach((snapChild) => {
-
-          let ownListsTemp = data.val()[snapChild.key]['own'];
-          let shareListsTemp = data.val()[snapChild.key]['share'];
-
-          if(typeof ownListsTemp == 'undefined')
-            ownListsTemp = [];
-          if(typeof shareListsTemp == 'undefined')
-            shareListsTemp = [];
-
-          if(shareListsTemp.indexOf(todoList.uuid) != -1){
-            message = 'Cette liste est déjà partagée avec ' + email;
-          }else if(ownListsTemp.indexOf(todoList.uuid) != -1){
-            message = email + ' est déjà propriétaire de cette liste';
-          }else{
-            shareListsTemp.push(todoList.uuid);
-            message = 'Succès du partage de la liste avec ' + email;
-          }
-
-          let pathUser = '/users/' + snapChild.key;
-          let userRef = firebase.database().ref(pathUser);
-
-          userRef.set({
-            own: ownListsTemp,
-            share: shareListsTemp,
-            email: email
-          });
-
-        });
-
-        return message;
-      })
-  }
+  
   public getReaders(){
     return this.listreaders;
   }

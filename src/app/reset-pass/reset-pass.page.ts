@@ -18,8 +18,8 @@ export class ResetPassPage implements OnInit {
   // tslint:disable-next-line:variable-name
   validation_messages = {
     email: [
-      { type: 'required', message: 'Email is required.' },
-      { type: 'pattern', message: 'Please enter a valid email.' }
+      { type: 'required', message: 'Email obligatoir.' },
+      { type: 'pattern', message: 'Entrer un email valide.' }
     ]
   };
   constructor(  private formBuilder: FormBuilder, private navCtrl: NavController
@@ -40,7 +40,7 @@ export class ResetPassPage implements OnInit {
   resetPassword(value: any): any {
     console.log(value.email);
     return firebase.auth().sendPasswordResetEmail(value.email).then(() => {
-      this.successMessage = 'Consulter votre boite mail!!!'
+      this.successMessage = 'Consultez votre boite mail!!!'
       this.navCtrl.navigateBack('/authent');
 
     }).catch((err) => {

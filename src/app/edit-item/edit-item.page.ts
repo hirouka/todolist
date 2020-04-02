@@ -74,11 +74,12 @@ startvoca2() {
 
   editItem() {
     this.listService.editItem(this.title,this.desc).then(()=>{
-      this.listService.getUnsubscribe();
+     // this.listService.getUnsubscribe();
 
     });
     this.router.navigate(['/todo-item']).then(()=>{
-      this.listService.getUnsubscribe();
+      this.helperService.presentToast('Tâche modifiée!');
+      //this.listService.getUnsubscribe();
     });
   }
 

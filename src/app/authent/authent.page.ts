@@ -22,6 +22,7 @@ export class AuthentPage implements OnInit {
     a: string;
     gooleprovider: auth.GoogleAuthProvider;
     mail: string;
+  credential: auth.OAuthCredential;
   constructor(
       private fb: Facebook,
       private afAuth: AngularFireAuth,
@@ -66,12 +67,12 @@ export class AuthentPage implements OnInit {
 
     validation_messages = {
         email: [
-            { type: 'required', message: 'Email is required.' },
-            { type: 'pattern', message: 'Please enter a valid email.' }
+            { type: 'required', message: 'Email obligatoire.' },
+            { type: 'pattern', message: 'Entrer un email valide.' }
         ],
         password: [
-            { type: 'required', message: 'Password is required.' },
-            { type: 'minlength', message: 'Password must be at least 5 characters long.' }
+            { type: 'required', message: 'Mot de passe obligatoire.' },
+            { type: 'minlength', message: 'Mot de passe doit contenir au moins 5 caractères.' }
         ]
     };
     ngOnInit() {
@@ -121,18 +122,65 @@ export class AuthentPage implements OnInit {
 
     }
 
-    loginwithgoogle() {
+    loginwithgooglle() {
+      this.authService.authenticated = false;
       this.googlePlus.login({})
         .then(res =>
           {
             this.authService.authenticated = true;
-            this.navCtrl.navigateForward('/todoslist');
             console.log(res);
-          } )
+          } ).then(()=>{
+            console.log("navigate");
+            this.navCtrl.navigateForward('/todoslist');
+
+          })
         .catch(err => console.log('err',err));
 
   }
 
+
+  async loginwithgoogle() {
+    this.authService.authenticated = false;
+
+    this.googlePlus.login( {
+      'sha1': '78:42:c2:d6:49:d8:3a:85:31:dd:ed:31:1b:c1:b8:63:21:ce:25:64',
+      'webClientId': '920900901910-7calpuag1n7nemboks5vmg16eqivluet.apps.googleusercontent.com',
+      'offline': true
+    })
+      .then((response) => {
+        const { idToken, accessToken } = response
+        this.onLoginSuccess(idToken, accessToken);
+      }).catch((error) => {
+        console.log(error)
+        alert('error:' + JSON.stringify(error))
+      });
+  }
+  onLoginSuccess(accessToken, accessSecret) {
+    const credential = accessSecret ? firebase.auth.GoogleAuthProvider
+        .credential(accessToken, accessSecret) : firebase.auth.GoogleAuthProvider
+            .credential(accessToken);
+      firebase.auth().signInWithCredential(credential)
+      .then((response) => {
+        console.log(response);
+        this.authService.authenticated = true;
+        this.todolistservice.init_fire();
+                    console.log('*****', firebase.auth().currentUser.uid);
+                    const userId = firebase.auth().currentUser.uid;
+                    const userDoc = this.fires.doc<any>('users/' + userId);
+                    userDoc.set({
+                      firstName: response.user.displayName.substr(0,response.user.displayName.indexOf(' ')),
+                      lastName: response.user.displayName.substr(response.user.displayName.indexOf(' ')+1),
+                      email: response.user.email,
+                      id : userId,
+              });
+
+        this.navCtrl.navigateForward('/todoslist');
+      })
+
+  }
+  onLoginError(err) {
+    console.log(err);
+  }
 
     resetPassword(value: any): any {
         this.navCtrl.navigateForward('/reset-pass');
@@ -168,17 +216,45 @@ export class AuthentPage implements OnInit {
               // Check if we are already signed-in Firebase with the correct user.
               if (!this.isUserEqual(response.authResponse, firebaseUser)) {
                 // Build Firebase credential with the Facebook auth token.
-                const credential = firebase.auth.FacebookAuthProvider.credential(
+                    this.credential = firebase.auth.FacebookAuthProvider.credential(
                   response.authResponse.accessToken
                 );
                 // Sign in with the credential from the Facebook user.
                 firebase
                   .auth()
-                  .signInWithCredential(credential)
+                  .signInWithCredential(this.credential)
                   .then(()=>{
+                    console.log(this.credential);
                     this.authService.authenticated = true;
                     this.navCtrl.navigateForward('/todoslist');
                     this.todolistservice.init_fire();
+                    console.log('*****', firebase.auth().currentUser.uid);
+                    const userId = firebase.auth().currentUser.uid;
+                    const userDoc = this.fires.doc<any>('users/' + userId);
+
+                    this.fb.api("/me?fields=name,gender,birthday,email", []).then((user) => {
+
+                      // Get the connected user details
+                      var gender    = user.gender;
+                      var birthday  = user.birthday;
+                      var name      = user.name;
+                      var email     = user.email;
+      
+                      // => Open user session and redirect to the next page
+                      userDoc.set({
+                            firstName: name.substr(0,name.indexOf(' ')),
+                            lastName: name.substr(name.indexOf(' ')+1),
+                            email: email,
+                            id : userId,
+                    });
+      
+                  });
+                    /*userDoc.set({
+                            firstName: value.firstName,
+                            lastName: value.lastName,
+                            email: value.email,
+                            id : userId,
+                    });*/
                   })
                   .catch(error => {
                     console.log(error,'hello facebook');

@@ -19,28 +19,28 @@
             <ion-button (click)="startvoca1()" float-right> <ion-icon name="microphone"></ion-icon>
             </ion-button>
             <ion-item>
-              <ion-label position="stacked">Title <ion-text color="danger">*</ion-text>
+              <ion-label position="stacked">Titre <ion-text color="danger">*</ion-text>
               </ion-label>
               <ion-input required id="title" type="text" name="title" [(ngModel)]="title" #ctrlTitle="ngModel">
               </ion-input>
-              <ion-text [hidden]="ctrlTitle.valid || ctrlTitle.pristine " color="danger">Title is required</ion-text>
+              <ion-text [hidden]="ctrlTitle.valid || ctrlTitle.pristine " color="danger">Titre obligatoire</ion-text>
             </ion-item>
         
         
             <ion-button (click)="startvoca2()" float-right> <ion-icon name="microphone"></ion-icon>
             </ion-button>
             <ion-item>
-              <ion-label position="stacked">Description <ion-text color="danger"></ion-text>
+              <ion-label position="stacked">Déscription <ion-text color="danger"></ion-text>
               </ion-label>
               <ion-input  id="desc" type="text" name="desc" [(ngModel)]="desc" #ctrlDesc="ngModel">
               </ion-input>
-              <ion-text [hidden]="ctrlDesc.valid || ctrlDesc.pristine " color="danger">Desciption is required</ion-text>
+              <ion-text [hidden]="ctrlDesc.valid || ctrlDesc.pristine " color="danger">Desciption obligatoire</ion-text>
               
             </ion-item>
           </ion-list>
           <div class="ion-padding">
             <ion-button expand="block" type="submit" class="ion-no-margin" [disabled]="!addListForm.valid">
-              Add item</ion-button>
+              Ajouter</ion-button>
           </div>
         </form>
       </ion-col>

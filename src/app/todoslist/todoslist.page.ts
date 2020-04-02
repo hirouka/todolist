@@ -163,8 +163,8 @@ export class TodoslistPage implements OnInit {
     }
     deleteTodo(id: string, todoTitle:string) {
       this.helperService.presentAlertConfirm(
-          'Suprimer la liste ',
-          `Vous êtes de vouloir supprimer la liste:  ${todoTitle} ?`,
+          'Suprimer une liste ',
+          `Êtes-vous sûr(e) de vouloir supprimer   ${todoTitle} ?`,
           [
               {
                   text: 'NON',
