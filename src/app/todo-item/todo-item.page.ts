@@ -75,6 +75,13 @@ export class TodoItemPage implements OnInit {
         ]
     );
 }
+onRenderItems(event) {
+  console.log(`Moving item from ${event.detail.from} to ${event.detail.to}`);
+   let draggedItem = this.items.splice(event.detail.from,1)[0];
+   this.items.splice(event.detail.to,0,draggedItem)
+  //this.listItems = reorderArray(this.listItems, event.detail.from, event.detail.to);
+  event.detail.complete();
+}
 
 EditItem(item: Item,itemTitle:string){
   this.listService.item = item;

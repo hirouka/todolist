@@ -1,3 +1,5 @@
+import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { SharedModule } from './shared/shared.module';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -43,6 +45,7 @@ firebase.initializeApp(environment.firebase);
     AngularFireDatabaseModule,
     AngularFirestoreModule,
     SharedModule ,
+   
     AngularFireStorageModule, ReactiveFormsModule, ResetPassPageModule],
 
   providers: [
@@ -52,6 +55,8 @@ firebase.initializeApp(environment.firebase);
     AuthService,
     AuthGuard,
     Facebook,
+    Geolocation,
+    NativeGeocoder,
     SpeechRecognition,
     Camera,
     File,
