@@ -98,7 +98,7 @@ startvoca2() {
     };
 
     this.nativeGeocoder.reverseGeocode(this.longitude, this.longitude, options)
-    .then((result: NativeGeocoderResult[]) => console.log(JSON.stringify(result[0])))
+    .then((result: NativeGeocoderResult[]) => console.log(result))
     .catch((error: any) => console.log(error));
     try {
       console.log('current user is> ', firebase.auth().currentUser.email);
