@@ -24,6 +24,7 @@
             <ion-item>
               <ion-label (click)="Afficherhtml2(item?.id,'reader')">
                 <h2> {{ item?.title}}</h2>
+                <p *ngIf="item.adresseCreation" >{{item.adresseCreation}}</p>
               </ion-label>
             </ion-item>
     
@@ -44,6 +45,7 @@
             <ion-item>
               <ion-label (click)="AfficherTodo(item?.id)">
                 <h2> {{ item?.title}}</h2>
+                <p *ngIf="item.adresseCreation" >{{item.adresseCreation}}</p>
               </ion-label>
               <!-- <ion-button color="dark" (click)=shareTodo(item?.id)>
                 <ion-icon name="share"></ion-icon>
@@ -110,6 +112,9 @@
       <ion-item>
         <ion-label (click)="Afficherhtml2(item?.id,'reader')">
           <h2>{{item?.title}}</h2>
+          <p *ngIf="item.adresseCreation" >{{item.adresseCreation}}</p>
+
+          
         </ion-label>
         <ion-button color="dark" (click)=shareTodo(item?.id)>
           <ion-icon name="share"></ion-icon>
@@ -123,6 +128,7 @@
       <ion-item>
         <ion-label (click)="AfficherTodo(item?.id)">
           <h2> {{ item?.title}}</h2>
+          <p *ngIf="item.adresseCreation" >{{item.adresseCreation}}</p>
         </ion-label>
         <!-- <ion-button color="dark" (click)=shareTodo(item?.id)>
           <ion-icon name="share"></ion-icon>

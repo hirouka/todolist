@@ -5,4 +5,5 @@ export interface List {
   uid?: string;
   items? : Array<Item>;  
   title: string;
+  adresseCreation? : string;
 }
