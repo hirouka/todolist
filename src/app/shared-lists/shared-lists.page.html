@@ -13,7 +13,7 @@
 <ion-content class="ion-padding">
     <ion-searchbar placeholder="Chercher" (ionInput)="getItemssearch($event)"></ion-searchbar>
 
-    <ion-list *ngIf="getListReaders().length>0 ; else contenu_pas_bon">
+    <ion-list *ngIf="ListReaders; else contenu_pas_bon">
         <ion-item>
           <ion-label color="danger">
             Partagée(s) avec moi en Lecture
@@ -22,7 +22,7 @@
         <ion-list  *ngIf="search ; else notsearchR" >
           <ion-item-sliding *ngFor="let item of filterDataR; let i = index">
             <ion-item>
-              <ion-label (click)="Afficherhtml2(item?.id,'reader')">
+              <ion-label (click)="AfficherItems(item?.id,'reader')">
                 <h2> {{ item?.title}}</h2>
                 <p *ngIf="item.adresseCreation" >{{item.adresseCreation}}</p>
               </ion-label>
@@ -34,7 +34,7 @@
       </ion-list>
   
   
-      <ion-list *ngIf="getListWriters().length>0; else contenu_pas_vide">
+      <ion-list *ngIf="ListWriters; else contenu_pas_vide">
         <ion-item>
           <ion-label color="danger">
             Partagée(s) avec moi en Ecriture
@@ -108,9 +108,9 @@
 
 
   <ng-template #notsearchR>
-    <ion-item-sliding *ngFor="let item of getListReaders(); let i = index">
+    <ion-item-sliding *ngFor="let item of ListReaders; let i = index">
       <ion-item>
-        <ion-label (click)="Afficherhtml2(item?.id,'reader')">
+        <ion-label (click)="AfficherItems(item?.id,'reader')">
           <h2>{{item?.title}}</h2>
           <p *ngIf="item.adresseCreation" >{{item.adresseCreation}}</p>
 
@@ -124,7 +124,7 @@
   </ng-template>
 
   <ng-template #notsearchW>
-    <ion-item-sliding *ngFor="let item of getListWriters(); let i = index">
+    <ion-item-sliding *ngFor="let item of ListWriters; let i = index">
       <ion-item>
         <ion-label (click)="AfficherTodo(item?.id)">
           <h2> {{ item?.title}}</h2>

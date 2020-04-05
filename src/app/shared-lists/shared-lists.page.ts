@@ -8,10 +8,8 @@ import {TodoslistService} from '../services/todoslist.service';
   styleUrls: ['./shared-lists.page.scss'],
 })
 export class SharedListsPage implements OnInit {
-  public Listtodos: any;
   public ListReaders: any;
   public ListWriters: any;
-  public filterData : any; 
   public filterDataR : any;
   public filterDataW : any;
   privatesearch: boolean;
@@ -20,15 +18,14 @@ export class SharedListsPage implements OnInit {
   constructor(private listService: TodoslistService , private route : Router) { }
 
   ngOnInit() {
-    this.filterData = this.listService.get();
+    this.getTodosListReaders();
+    this.getTodosListWriters();
   }
   getListReaders() {
     return this.listService.getReaders();
   }
 
-  getItemssearch(searchbar) {
-       
-        
+  getItemssearch(searchbar) { 
     // set q to the value of the searchbar
     var q = searchbar.srcElement.value;
     console.log(q);
@@ -57,12 +54,31 @@ export class SharedListsPage implements OnInit {
         }
       });
 
-   /* console.log(q, this.filterData);
-    console.log(q, this.filterDataW);
-    console.log(q, this.filterDataR);*/
-
-
   }
+  shareTodo(id: string) {
+    this.listService.id = id;
+    this.route.navigate(['/share-todo']);
+  }
+
+  
+  getTodosListReaders(event = null) {
+    this.listService.getTodosReaders('todos').subscribe(result => {
+      console.log('result', result);
+      this.ListReaders = result;
+      this.filterDataR = this.ListReaders;
+    }, (error) => {
+    });
+  }
+
+  getTodosListWriters(event = null) {
+    this.listService.getTodosWriters('todos').subscribe(result => {
+      console.log('result', result);
+      this.ListWriters = result;
+      this.filterDataR = this.ListReaders;
+    }, (error) => {
+    });
+  }
+
 
   getListWriters() {
     return this.listService.getWriters();
@@ -72,7 +88,7 @@ export class SharedListsPage implements OnInit {
     this.route.navigate(['/todoslist']);
   }
 
-  Afficherhtml2(id: string , reader : string) {
+  AfficherItems(id: string , reader : string) {
     this.listService.id  = id;
     this.listService.readerbool = true;
     this.route.navigate(['/todo-item']);

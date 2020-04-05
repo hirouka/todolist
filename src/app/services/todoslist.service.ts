@@ -12,10 +12,6 @@ import * as admin from 'firebase-admin';
 @Injectable()
 export class TodoslistService {
   private _rootRef: any;
-  
- 
-
-
   private todolistCollection: AngularFirestoreCollection<List>;
   private itemlistCollection: AngularFirestoreCollection<Item>;
   private usersCollection: AngularFirestoreCollection<any>;
@@ -41,7 +37,7 @@ export class TodoslistService {
   id: string;
   item: Item;
   private userId: string;
-    readerbool: boolean;
+  readerbool: boolean;
 
   constructor(private db: AngularFirestore) {
     this.listtodos = new Array<List>();
@@ -158,7 +154,35 @@ export class TodoslistService {
         })
     );
 }
+
+getTodosReaders(collectionId) {
+  return this.db.collection(collectionId, ref => ref.where('readers', 'array-contains', firebase.auth().currentUser.email)).snapshotChanges().pipe(
+    map(actions => {
+        return actions.map(doc => {
+            const data = doc.payload.doc.data();
+            const id = doc.payload.doc.id;
+            console.log('todo.id', id, 'todo.data', data.valueOf());
+            return {id, ...data};
+        });
+    })
+);
+}
   
+getTodosWriters(collectionId) {
+  return this.db.collection(collectionId, ref => ref.where('writers', 'array-contains', firebase.auth().currentUser.email)).snapshotChanges().pipe(
+    map(actions => {
+        return actions.map(doc => {
+            const data = doc.payload.doc.data();
+            const id = doc.payload.doc.id;
+            console.log('todo.id', id, 'todo.data', data.valueOf());
+            return {id, ...data};
+        });
+    })
+);
+}
+  
+
+
   public getReaders(){
     return this.listreaders;
   }

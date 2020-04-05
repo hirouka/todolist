@@ -75,7 +75,6 @@ export class TodoslistPage implements OnInit {
    */
 
   AfficherTodo(id: string) {
-    console.log("okokoko");
     this.listService.readerbool = false;
     this.listService.id = id;
     this.route.navigate(['/todo-item']);
