@@ -31,7 +31,7 @@ export class HelperService {
     async presentToast(message) {
         const toast = await this.toastController.create({
             message,
-            duration: 1000,
+            duration: 1500,
             showCloseButton: true,
             position: this.platform.is('desktop') ? 'top' : 'bottom'
         });

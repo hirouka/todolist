@@ -1,3 +1,4 @@
+import { HelperService } from './../services/helper.service';
 import { TodoslistService } from './../services/todoslist.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Component, OnInit } from '@angular/core';
@@ -23,6 +24,7 @@ export class AuthentPage implements OnInit {
     gooleprovider: auth.GoogleAuthProvider;
     mail: string;
   credential: auth.OAuthCredential;
+  showDeleteTodoSpinner: boolean;
   constructor(
       private fb: Facebook,
       private afAuth: AngularFireAuth,
@@ -31,7 +33,8 @@ export class AuthentPage implements OnInit {
       private formBuilder: FormBuilder,
       private fires: AngularFirestore,
       private todolistservice: TodoslistService,
-      private googlePlus: GooglePlus
+      private googlePlus: GooglePlus,
+      private helperService : HelperService,
 
   ) { }
 
@@ -184,16 +187,12 @@ export class AuthentPage implements OnInit {
           console.log(response);
     
           if (response.authResponse) {
-            // User is signed-in Facebook.
             const unsubscribe = firebase.auth().onAuthStateChanged(firebaseUser => {
               unsubscribe();
-              // Check if we are already signed-in Firebase with the correct user.
               if (!this.isUserEqual(response.authResponse, firebaseUser)) {
-                // Build Firebase credential with the Facebook auth token.
                     this.credential = firebase.auth.FacebookAuthProvider.credential(
                   response.authResponse.accessToken
                 );
-                // Sign in with the credential from the Facebook user.
                 firebase
                   .auth()
                   .signInWithCredential(this.credential)
@@ -207,14 +206,9 @@ export class AuthentPage implements OnInit {
                     const userDoc = this.fires.doc<any>('users/' + userId);
 
                     this.fb.api("/me?fields=name,gender,birthday,email", []).then((user) => {
-
-                      // Get the connected user details
-                      var gender    = user.gender;
-                      var birthday  = user.birthday;
                       var name      = user.name;
                       var email     = user.email;
       
-                      // => Open user session and redirect to the next page
                       userDoc.set({
                             firstName: name.substr(0,name.indexOf(' ')),
                             lastName: name.substr(name.indexOf(' ')+1),
@@ -231,17 +225,20 @@ export class AuthentPage implements OnInit {
                     });*/
                   })
                   .catch(error => {
+                    this.showDeleteTodoSpinner = true;
+                    this.helperService.presentToast('Adresse existe déjà!!');
+                    this.showDeleteTodoSpinner = false;
                     console.log(error,'hello facebook');
                   });
                   
               } else {
                 // User is already signed-in Firebase with the correct user.
-                console.log("already signed in");
+                console.log("deja connecté ");
               }
             });
           } else {
             // User is signed-out of Facebook.
-            console.log("sign out ");
+            console.log(" deconnection ");
             firebase.auth().signOut();
           }
         } catch (err) {
