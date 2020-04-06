@@ -46,7 +46,7 @@ export class ProfilePage implements OnInit {
     //this.getImagesDatabase();
     this.imgLoad ='assets/avatar.png';
     this.getImage();    
-    this.getUserInfos()
+    //this.getUserInfos()
   }
  
   ngOnInit(): void {
@@ -56,12 +56,12 @@ export class ProfilePage implements OnInit {
   }
 
   getUserInfos(event = null){
-    this.todoslistservice.getUsers('users').subscribe(result => {
+    this.userCourant = this.todoslistservice.getUsers('users').subscribe(result => {
       console.log('result', result);
       this.users = result;
       this.userCourant = this.users[0];
       console.log(this.userCourant.firstName, '*****');
-     
+       return this.userCourant;
     }, (error) => {
     });
   }
