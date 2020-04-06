@@ -34,32 +34,6 @@ export class AuthentPage implements OnInit {
       private googlePlus: GooglePlus
 
   ) { }
- /* email: string;
-  emailSent = false;
-  error = null;
-  constructor(public afAuth: AngularFireAuth, private router: Router, private authService: AuthService) {
-  }
-
-  login() {
-    this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider());
-    this.router.navigate(['todoslist']);
-
-  }
-    login1() {
-    this.emailSent = false;
-    this.error = null;
-    this.authService.signIn(this.email)
-        .then(
-            () => this.emailSent = true
-        )
-        .catch(
-            error => this.error = error
-        );
-  }
-  logout() {
-    this.afAuth.auth.signOut();
-  }
-  ngOnInit() {}*/
 
     validationsform: FormGroup;
     errorMessage = '';

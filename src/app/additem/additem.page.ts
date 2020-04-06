@@ -18,12 +18,16 @@ export class AdditemPage implements OnInit {
   matchess: string[];
 
   constructor(private listService: TodoslistService,
-              private router: Router,private speechRecognition: SpeechRecognition ,private cd: ChangeDetectorRef) { }
+              private router: Router,
+              private speechRecognition: SpeechRecognition,
+              private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
+    this.getpermissions();
   }
 
   startvoca1() {
+    this.getpermissions();
     this.title = '';
     this.speechRecognition.startListening()
       .subscribe(
@@ -38,6 +42,7 @@ export class AdditemPage implements OnInit {
 }
 
 startvoca2() {
+  this.getpermissions();
   this.desc = '';
 
   this.speechRecognition.startListening()
@@ -68,5 +73,21 @@ startvoca2() {
   retourPagetodo() {
     window.history.back();
   }
+
+  getpermissions(){
+    this.speechRecognition.hasPermission()
+    .then((hasPermission: boolean) => {
+  
+      if (!hasPermission) {
+      this.speechRecognition.requestPermission()
+        .then(
+          () => console.log('Granted'),
+          () => console.log('Denied')
+        )
+      }
+  
+   });
+  }
+  
 
 }

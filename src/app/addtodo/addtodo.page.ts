@@ -32,19 +32,8 @@ export class AddtodoPage implements OnInit {
               private helperService: HelperService, private speechRecognition: SpeechRecognition,private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
-    this.speechRecognition.hasPermission()
-      .then((hasPermission: boolean) => {
-
-        if (!hasPermission) {
-        this.speechRecognition.requestPermission()
-          .then(
-            () => console.log('Granted'),
-            () => console.log('Denied')
-          )
-        }
-
-     });
-     this.getLocation();
+    this.getpermissions()
+    this.getLocation();
   }
   startvoca1() {
     this.title = '';
@@ -60,20 +49,20 @@ export class AddtodoPage implements OnInit {
       //this.title = this.matches[0].toString();
 }
 
-startvoca2() {
-  this.desc = '';
 
-  this.speechRecognition.startListening()
-    .subscribe(
-      (matchess: string[]) => {
-        this.matchess = matchess;
-        this.desc = this.matchess[0].toString();
-        this.cd.detectChanges();
-      },
-      (onerror) => console.log('error:', onerror)
-    );
-    //this.desc = this.matchess[0].toString();
+getpermissions(){
+  this.speechRecognition.hasPermission()
+  .then((hasPermission: boolean) => {
 
+    if (!hasPermission) {
+    this.speechRecognition.requestPermission()
+      .then(
+        () => console.log('Granted'),
+        () => console.log('Denied')
+      )
+    }
+
+ });
 }
 
   getLocation(){

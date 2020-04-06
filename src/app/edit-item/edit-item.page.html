@@ -32,8 +32,8 @@
             <ion-item>
               <ion-label position="stacked">Déscription <ion-text color="danger"></ion-text>
               </ion-label>
-              <ion-input  id="desc" type="text" name="desc" [(ngModel)]="desc" #ctrlDesc="ngModel">
-              </ion-input>
+              <ion-textarea  id="desc" type="text" name="desc" [(ngModel)]="desc" #ctrlDesc="ngModel">
+              </ion-textarea>
               <ion-text [hidden]="ctrlDesc.valid || ctrlDesc.pristine " color="danger">Desciption obligatoire</ion-text>
               
             </ion-item>

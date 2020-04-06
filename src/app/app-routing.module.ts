@@ -22,10 +22,6 @@ const routes: Routes = [
     loadChildren: () => import('./register/register.module').then( m => m.RegisterPageModule)
   },
   {
-    path: 'addlisttodo',
-    loadChildren: () => import('./addlisttodo/addlisttodo.module').then( m => m.AddlisttodoPageModule), canActivate : [AuthGuard]
-  },
-  {
     path: 'todo-item',
     loadChildren: () => import('./todo-item/todo-item.module').then( m => m.TodoItemPageModule), canActivate : [AuthGuard]
   },
@@ -41,10 +37,6 @@ const routes: Routes = [
     path: 'shared-lists',
     loadChildren: () => import('./shared-lists/shared-lists.module').then(m => m.SharedListsPageModule),canActivate : [AuthGuard]
 },
-  {
-    path: 'camera',
-    loadChildren: () => import('./camera/camera.module').then( m => m.CameraPageModule)
-  },
   {
     path: 'reset-pass',
     loadChildren: () => import('./reset-pass/reset-pass.module').then( m => m.ResetPassPageModule)

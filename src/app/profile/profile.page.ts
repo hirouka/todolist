@@ -30,6 +30,8 @@ export class ProfilePage implements OnInit {
   imgLoad: any;
   firebase: any;
   errorMessage = '';
+  users: any[];
+  userCourant: any ={};
 
 
   constructor( private router: Router,
@@ -43,14 +45,28 @@ export class ProfilePage implements OnInit {
     public afSG: AngularFireStorage ) {
     //this.getImagesDatabase();
     this.imgLoad ='assets/avatar.png';
-    this.getImage();     
+    this.getImage();    
+    this.getUserInfos()
   }
  
   ngOnInit(): void {
-     
+    this.getUser();
+    this.getUserInfos(); 
+    
   }
 
-  getUserInfos(){
+  getUserInfos(event = null){
+    this.todoslistservice.getUsers('users').subscribe(result => {
+      console.log('result', result);
+      this.users = result;
+      this.userCourant = this.users[0];
+      console.log(this.userCourant.firstName, '*****');
+     
+    }, (error) => {
+    });
+  }
+
+  getUser(){
     console.log(this.todoslistservice.getUserInfo(),'----');
     //this.capturedSnapURL = firebase. ;
     return this.todoslistservice.getUserInfo();
@@ -147,7 +163,6 @@ export class ProfilePage implements OnInit {
  }
 
   getImagesStorage(image: any) {
-    
     const imgRef = image.payload.exportVal().ref;
     this.afSG.ref(imgRef).getDownloadURL().subscribe(imgUrl => {
       console.log(imgUrl);

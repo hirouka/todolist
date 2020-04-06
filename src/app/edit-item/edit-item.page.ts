@@ -28,20 +28,10 @@ export class EditItemPage implements OnInit {
   ngOnInit() {
     this.title = this.listService.item.title;
     this.desc = this.listService.item.description;
-    this.speechRecognition.hasPermission()
-      .then((hasPermission: boolean) => {
-
-        if (!hasPermission) {
-        this.speechRecognition.requestPermission()
-          .then(
-            () => console.log('Granted'),
-            () => console.log('Denied')
-          )
-        }
-
-     });
+    this.getpermissions();
   }
   startvoca1() {
+    this.getpermissions();
     this.title = '';
     this.speechRecognition.startListening()
       .subscribe(
@@ -56,8 +46,8 @@ export class EditItemPage implements OnInit {
 }
 
 startvoca2() {
+  this.getpermissions();
   this.desc = '';
-
   this.speechRecognition.startListening()
     .subscribe(
       (matchess: string[]) => {
@@ -85,6 +75,21 @@ startvoca2() {
 
   RetourSurItems() {
    this.router.navigate(['/todo-item'])
+  }
+
+  getpermissions(){
+    this.speechRecognition.hasPermission()
+    .then((hasPermission: boolean) => {
+  
+      if (!hasPermission) {
+      this.speechRecognition.requestPermission()
+        .then(
+          () => console.log('Granted'),
+          () => console.log('Denied')
+        )
+      }
+  
+   });
   }
 
 }

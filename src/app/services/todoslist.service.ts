@@ -142,6 +142,20 @@ export class TodoslistService {
   }
 
 
+
+  getUsers(collectionId) {
+    return this.db.collection('users', ref => ref.where('email', '==', firebase.auth().currentUser.email)).snapshotChanges().pipe(
+        map(actions => {
+            return actions.map(doc => {
+                const data = doc.payload.doc.data();
+                const id = doc.payload.doc.id;
+                console.log('todo.id --->', id, 'todo.data--->', data.valueOf());
+                return {id, ...data};
+            });
+        })
+    );
+}
+
   getTodos(collectionId) {
     return this.db.collection(collectionId, ref => ref.where('owner', '==', firebase.auth().currentUser.email)).snapshotChanges().pipe(
         map(actions => {
