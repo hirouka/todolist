@@ -5,18 +5,7 @@ export const LOGIN = {
   },
   password: {
     required: 'Mot de passe obligatoire',
-    minlength: 'Password must be atleast 5 characters long'
-  }
-}
-
-export const SIGNUP = {
-  email: {
-    required: 'Email is required',
-    email: 'Email is invalid'
-  },
-  password: {
-    required: 'Password is required',
-    minlength: 'Password must be atleast 5 characters long'
+    minlength: 'Mot de passe est trop court '
   }
 }
 
@@ -26,17 +15,4 @@ export const ADDTodoOrItem = {
   }
 }
 
-export const EDITPRODUCT = {
-  name: {
-    required: 'Name is required',
-  },
-  price: {
-    required: 'Price is required',
-  },
-  size: {
-    required: 'Size is required',
-  },
-  brand: {
-    required: 'Brand is required',
-  },
-}
+
