@@ -1,6 +1,9 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-title>Inscription</ion-title>
+    <ion-buttons color="danger" slot="start">
+      <ion-back-button defaultHref="/authent"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Changer le mot de passe</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -8,7 +11,7 @@
   <form class="form" [formGroup]="validationsform" (ngSubmit)="resetPassword(validationsform.value)">
 
     <ion-item>
-      <ion-label  position="floating" color="primary"> <ion-icon slot="start" name="at"></ion-icon> Email</ion-label>
+      <ion-label  position="floating" > <ion-icon slot="start" name="at"></ion-icon> Email</ion-label>
       <ion-input type="text" formControlName="email"></ion-input>
     </ion-item>
     <div class="validation-errors">
@@ -21,19 +24,11 @@
 
 
     <br>
-    <ion-button color="black" expand="block" shape="round" fill="outline" class="submit-btn" type="submit"  [disabled]="!validationsform.valid" >Envoyer</ion-button>
-
-    <!--
-        <ion-button  class="submit-btn" type="submit"  [disabled]="!validationsform.valid">Register</ion-button>
-    -->
+    <ion-button color="secondary" expand="block" shape="round" fill="outline" class="submit-btn" type="submit"  [disabled]="!validationsform.valid" >Envoyer</ion-button>
     <ion-label class="error-message"  color="danger">{{errorMessage}}</ion-label>
     <ion-label class="success-message" color="success">{{successMessage}}</ion-label>
     <ion-item lines="none">
-      <ion-button color="black" slot="end" fill="clear" (click)="goLoginPage()">Se Connecter?</ion-button>
+      <ion-button color="secondary" slot="end" fill="clear" (click)="goLoginPage()">Se Connecter?</ion-button>
     </ion-item>
   </form>
-  <!--<ion-label class="go-to-login">Register?
-    <a (click)="goLoginPage()">Try to Log In.</a>
-
-  </ion-label>-->
 </ion-content>

@@ -16,7 +16,7 @@ import {AngularFireDatabase} from '@angular/fire/database';
 })
 export class TodoItemPage implements OnInit {
   @Input() id: string;
-  a: string;
+  email: string;
   validationsform: FormGroup;
   errorMessage = '';
   public items: Array<Item> = new Array<Item>();
@@ -34,7 +34,7 @@ export class TodoItemPage implements OnInit {
   ) {
     
     this.readerbool = this.listService.readerbool;
-    this.a = this.authservice.a;
+    this.email = this.authservice.email;
   }
 
   ngOnInit(): void {
@@ -79,7 +79,6 @@ onRenderItems(event) {
   console.log(`Moving item from ${event.detail.from} to ${event.detail.to}`);
    let draggedItem = this.items.splice(event.detail.from,1)[0];
    this.items.splice(event.detail.to,0,draggedItem)
-  //this.listItems = reorderArray(this.listItems, event.detail.from, event.detail.to);
   event.detail.complete();
 }
 
@@ -89,15 +88,12 @@ EditItem(item: Item,itemTitle:string){
 }
 
   delete(pos: number) {
-    // tslint:disable-next-line:no-shadowed-variable
     this.listService.delete(this.items[pos]);
     this.listService.get();
   }
 
 
   changeCheckState(item: Item) {
-    console.log('bool',this.readerbool);
-    console.log(item.isDone);
     this.listService.update(item);
 
 

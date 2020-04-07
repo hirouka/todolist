@@ -4,7 +4,7 @@ import { List } from '../model/list';
 import { TodoslistService } from '../services/todoslist.service';
 import { Observable } from 'rxjs';
 import { AuthService } from '../auth.service';
-import { NavController, IonItemSliding } from '@ionic/angular';
+import { NavController, IonItemSliding, MenuController } from '@ionic/angular';
 import { FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CameraOptions, Camera } from '@ionic-native/camera/ngx';
@@ -16,13 +16,8 @@ import * as firebase from 'firebase';
   styleUrls: ['./todoslist.page.scss'],
 })
 export class TodoslistPage implements OnInit {
-  @Output() iid;
-  a: string;
+  email: string;
   navigate: any;
-  itmbool = false;
-
-  id: string;
-  todoDetail: any = {};
   showDeleteTodoSpinner = false;
   validationsform: FormGroup;
   errorMessage = '';
@@ -31,18 +26,19 @@ export class TodoslistPage implements OnInit {
   public filterData: any;
   search: boolean;
   todoList: any;
-  // tslint:disable-next-line:no-shadowed-variable
   constructor(private helperService: HelperService,
     private listService: TodoslistService,
     private authservice: AuthService,
-    private navCtrl: NavController,
-    public route: Router, private camera: Camera
+    private route: Router,
+    private menuCtlr: MenuController
+
   ) {
-    this.itmbool = false;
-    this.a = this.authservice.a;
+    this.email = this.authservice.email;
     this.Listtodos = this.listService.get();
+    this.menuActive();
 
   }
+  
 
   ngOnInit(): void {
     console.log(this.listService.get());
@@ -53,6 +49,9 @@ export class TodoslistPage implements OnInit {
     this.filterData = this.listService.get();
 
   }
+  menuActive() {
+    this.menuCtlr.enable(true, 'menu_1');
+}
 
   /**
    * Renvoyer la liste des taches
@@ -66,7 +65,6 @@ export class TodoslistPage implements OnInit {
    * @param pos
    */
   delete(pos: number) {
-    // tslint:disable-next-line:no-shadowed-variable
     this.listService.delete(this.getList()[pos]);
     this.listService.get();
   }
@@ -87,13 +85,6 @@ export class TodoslistPage implements OnInit {
   }
   AddTodo() {
     this.route.navigate(['/addtodo']);
-  }
-  Afficherhtml2(id: string, reader: string) {
-    this.listService.id = id;
-    this.listService.readerbool = true;
-    this.route.navigate(['/todo-item']);
-
-
   }
   deleteTodo(id: string, todoTitle: string) {
     this.helperService.presentAlertConfirm(
@@ -145,19 +136,17 @@ export class TodoslistPage implements OnInit {
   }
 
   getItemssearch(searchbar) {
-    var q = searchbar.srcElement.value;
-    console.log(q);
+    var value = searchbar.srcElement.value;
+    console.log(value);
     this.search = true;
-
-    // if the value is an empty string don't filter the items
-    if (!q) {
+    if (!value) {
       this.search = false;
       return;
     }
 
     this.filterData = this.getList().filter((v) => {
-      if (v.title && q) {
-        if (v.title.toLowerCase().indexOf(q.toLowerCase()) > -1) {
+      if (v.title && value) {
+        if (v.title.toLowerCase().indexOf(value.toLowerCase()) > -1) {
           return true;
         }
         return false;

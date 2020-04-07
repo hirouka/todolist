@@ -1,9 +1,9 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Pick Location</ion-title>
+    <ion-title>Detecter Position </ion-title>
     <ion-buttons slot="primary">
       <ion-button (click)="onCancel()">
-        cancel
+        Annuler
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -15,13 +15,13 @@
 
     <ion-button expand="block" class="ion-margin" (click)="startTracking()" *ngIf="!isTracking">
       <ion-icon name="locate" slot="start">
-        Start Tracking
+        commencer le suivi
       </ion-icon>
     </ion-button>
 
     <ion-button expand="block" (click)="stopTracking()" *ngIf="isTracking">
       <ion-icon name="hand" slot="start">
-        Stop Tracking
+        arrêter le suivi
       </ion-icon>
     </ion-button>
 

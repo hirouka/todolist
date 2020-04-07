@@ -43,10 +43,8 @@ export class ProfilePage implements OnInit {
     private authservice: AuthService,
     public afDB: AngularFireDatabase,
     public afSG: AngularFireStorage ) {
-    //this.getImagesDatabase();
     this.imgLoad ='assets/avatar.png';
     this.getImage();    
-    //this.getUserInfos()
   }
  
   ngOnInit(): void {
@@ -60,15 +58,12 @@ export class ProfilePage implements OnInit {
       console.log('result', result);
       this.users = result;
       this.userCourant = this.users[0];
-      console.log(this.userCourant.firstName, '*****');
        return this.userCourant;
     }, (error) => {
     });
   }
 
   getUser(){
-    console.log(this.todoslistservice.getUserInfo(),'----');
-    //this.capturedSnapURL = firebase. ;
     return this.todoslistservice.getUserInfo();
   }
 
@@ -81,19 +76,12 @@ export class ProfilePage implements OnInit {
       sourceType:choix,
   }
     this.camera.getPicture(cameraOptions).then((imageData) => {
-      // this.camera.DestinationType.FILE_URI gives file URI saved in local
-      // this.camera.DestinationType.DATA_URL gives base64 URI
-      console.log("Avant");
-
       let base64Image = 'data:image/jpeg;base64,' + imageData;
       this.capturedSnapURL = base64Image;
-      console.log("Apres");
       this.upload(firebase.auth().currentUser.uid);
 
   }, (err) => {
-
       console.log(err);
-      // Handle error
   });
   }
 
@@ -108,19 +96,6 @@ export class ProfilePage implements OnInit {
         });
 }
 
-  public save() {
-    /*this.auth.register(this.info).subscribe(success => {
-      if (success) {
-        this.saveSuccess = true;
-        this.showPopup("Success", "Thanks! Profile updated.");
-      } else {
-        this.showPopup("Error", "Problem updating profile.");
-      }
-    },
-    error => {
-      this.showPopup("Error", error);
-    });*/
-  }
 
   async showPopup(title, text) {
     let alert = await this.alertCtrl.create({
@@ -130,8 +105,7 @@ export class ProfilePage implements OnInit {
         {
           text: 'OK',
           handler: data => {
-            if (this.saveSuccess) {
-              // console.log('create successs');
+            if (this.saveSuccess) {      
               this.router.navigateByUrl('/home');
             }
           }
@@ -157,7 +131,6 @@ export class ProfilePage implements OnInit {
          });
      } catch (e) {
         this.imgLoad ='assets/avatar.png';
-         console.log("hello");
          console.log(e);
      }
  }
@@ -185,7 +158,6 @@ export class ProfilePage implements OnInit {
     this.authservice.logoutUser()
       .then(res => {
           this.authservice.authenticated = false;
-          console.log('byebye');
           console.log(res);
           this.errorMessage = '';
           this.navCtrl.navigateForward('');

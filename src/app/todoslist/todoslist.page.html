@@ -24,11 +24,9 @@
                                 {{todo.title}}
                                 <p *ngIf="todo.adresseCreation">{{todo.adresseCreation}}</p>
                             </ion-label>
-                            <ion-item slot="end">
                                 <ion-button color="dark" slot="end" (click)=shareTodo(todo?.id)>
                                     <ion-icon name="share"></ion-icon>
                                 </ion-button>
-                            </ion-item>
                         </ion-item>
                         <ion-item-options side="end">
                             <ion-item-option color="danger" (click)="deleteTodo(todo.id,todo.title)">
@@ -63,11 +61,9 @@
                 <h2>{{todo.title}}</h2>
                 <p *ngIf="todo.adresseCreation">{{todo.adresseCreation}}</p>
             </ion-label>
-            <ion-item slot="end">
                 <ion-button color="dark" slot="end" (click)=shareTodo(todo?.id)>
                     <ion-icon name="share"></ion-icon>
                 </ion-button>
-            </ion-item>
         </ion-item>
         <ion-item-options side="end">
             <ion-item-option color="danger" (click)="deleteTodo(todo.id,todo.title)">

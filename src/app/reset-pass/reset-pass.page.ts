@@ -15,7 +15,6 @@ export class ResetPassPage implements OnInit {
   successMessage: string = '';
 
 
-  // tslint:disable-next-line:variable-name
   validation_messages = {
     email: [
       { type: 'required', message: 'Email obligatoir.' },

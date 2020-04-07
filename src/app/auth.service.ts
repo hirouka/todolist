@@ -1,3 +1,4 @@
+import { MenuController } from '@ionic/angular';
 import {Injectable} from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/auth';
 import * as firebase from 'firebase/app';
@@ -10,10 +11,13 @@ import {TodoslistService} from './services/todoslist.service';
 })
 export class AuthService {
     public authenticated = false;
-    a: string;
+    email: string;
     private firestore: any;
 
-    constructor(private router: Router, private fires: AngularFirestore , private todolistservice: TodoslistService) {
+    constructor(private router: Router, private fires: AngularFirestore ,
+         private todolistservice: TodoslistService,
+         private menuCtlr: MenuController
+         ) {
     }
 
     SendVerificationMail() {
@@ -46,7 +50,7 @@ export class AuthService {
                     (res) => {
                         if (res.user.emailVerified !== true) {
                             this.SendVerificationMail();
-                            window.alert('Please validate your email address. Kindly check your inbox.');
+                            window.alert('Verifiez votre boîte mail SVP!');
 
                         } else {
                             resolve(res);
@@ -56,7 +60,7 @@ export class AuthService {
 
                     },
                     err => reject(err)),
-                this.a = value.email;
+                this.email = value.email;
         });
     }
 
@@ -65,7 +69,7 @@ export class AuthService {
             if (firebase.auth().currentUser) {
                 firebase.auth().signOut()
                     .then(() => {
-                        console.log('LOG Out');
+                        this.menuCtlr.enable(false, 'menu_1');
                         resolve();
                         this.todolistservice.getUnsubscribe();
                         this.todolistservice.clean_list();

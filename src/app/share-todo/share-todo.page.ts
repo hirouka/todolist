@@ -41,24 +41,8 @@ export class ShareTodoPage implements OnInit {
     window.history.back();
   }
 
-  addUser_old() {
-    // tslint:disable-next-line:triple-equals
-    if (this.writer.length >0 && this.reader.length > 0 && this.writer == this.reader) {
-      this.listService.addUserwriter(this.listService.id, this.writer);
-    } else{
-      if (this.reader.length > 0) {
-        this.listService.addUserReader(this.listService.id, this.reader);
-      }
-      if (this.writer.length > 0) {
-        this.listService.addUserwriter(this.listService.id, this.writer);
-      }
-
-    }
-
-  }
 
   addUser() {
-    // tslint:disable-next-line:triple-equals
       if (this.carbrand.length > 0 && this.carbrand === "Lecteur") {
         this.listService.addUserReader(this.listService.id, this.readerwriter).then(()=>{
           this.router.navigate(['/todoslist']);
@@ -70,8 +54,6 @@ export class ShareTodoPage implements OnInit {
         });;
         
       }
-
-    
 
   }
 

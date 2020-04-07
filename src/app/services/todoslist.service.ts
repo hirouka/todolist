@@ -11,15 +11,15 @@ import * as admin from 'firebase-admin';
 
 @Injectable()
 export class TodoslistService {
-  private _rootRef: any;
   private todolistCollection: AngularFirestoreCollection<List>;
   private itemlistCollection: AngularFirestoreCollection<Item>;
   private usersCollection: AngularFirestoreCollection<any>;
   private todolistCollectionReader : AngularFirestoreCollection<List>;
   private todolistCollectionWriter : AngularFirestoreCollection<List>;
-  public   unsubtodos:any;
-  private   unsubReaders:any;
-  private   unsubWriter:any;
+
+  public  unsubtodos:any;
+  private unsubReaders:any;
+  private unsubWriter:any;
 
   private todos: Observable<Array<List>>;
   private readers: Observable<Array<List>>;
@@ -44,23 +44,7 @@ export class TodoslistService {
     this.listreaders = new Array<List>();
     this.listwriters = new Array<List>();
     this.listusers = new Array<any>()
-    this._rootRef = firebase.database().ref('/users');
-   /* this.itemlistCollection = db.collection<Item>('items');
-    this.todolistCollection = db.collection<List>('todos', ref => ref.where('iduser', '==', firebase.auth().currentUser.uid));
-    this.usersCollection = db.collection<any>('users');
 
-    this.todos = this.todolistCollection.snapshotChanges().pipe(
-        map(actions => {
-          return actions.map((a: any) => {
-            const data = a.payload.doc.data();
-            const id = a.payload.doc.id;
-            return { id, ...data };
-          });
-        }));
-    this.todos.subscribe(res => {
-      this.listtodos = res;
-
-    });*/
   }
 
   init_fire() {
@@ -124,12 +108,15 @@ export class TodoslistService {
 
     
   }
+
+  /**
+   * fonction appelée lors de logout
+   */
   clean_list() {
       this.itemlistCollection = null;
       this.todolistCollection = null;
       this.usersCollection = null;
       this.listtodos = null;
-
 
     }
 
@@ -137,7 +124,6 @@ export class TodoslistService {
    * renvoie une liste de todoList
    */
   public get(): Array<List> {
-
     return this.listtodos;
   }
 
@@ -207,12 +193,7 @@ getTodosWriters(collectionId) {
   public getUserInfo(){
     return this.listusers;
   }
-  /*public isToreader(list : List){
-    this.todolistCollection.doc(this.id).ref
-    return 
 
-  }
-*/
   public  getItems(): Observable<Array<Item>> {
     return this.todolistCollection.doc(this.id).collection<Item>('items').snapshotChanges().pipe( map(actions => {
       return actions.map((a: any) => {
@@ -228,8 +209,6 @@ getTodosWriters(collectionId) {
    * @param list
    */
   public delete(list: List) {
-    console.log('supp');
-    console.log(list);
     return this.todolistCollection.doc(list.id).delete();
   }
 
@@ -248,8 +227,6 @@ getTodosWriters(collectionId) {
    */
   addList(list: List) {
     this.userId = firebase.auth().currentUser.uid;
-    //console.log(this.usersCollection.doc(this.userId).get());
-    //console.log(this.userId);
     console.log(list);
     return this.todolistCollection.add(list);
 
@@ -262,17 +239,6 @@ getTodosWriters(collectionId) {
   addItem(item: Item) {
     return this.todolistCollection.doc(this.id).collection('items').add(item);
   }
-
-  /**
-   *
-   * @param list
-   */
-/*
-  getItem(id:number): Observable<Item> {
-    return this.getItems()
-        .map(items => items.find(item => item.id === id));
-  }
-*/
 
 async deleteItem(itemId, todoItemsId) {
   try {
@@ -326,7 +292,6 @@ async deleteItem(itemId, todoItemsId) {
   }
 
   addUserwriter(id: string, writer: string) {
-
     return this.todolistCollection.doc(id).set(
         {
           writers:  firebase.firestore.FieldValue.arrayUnion(writer)

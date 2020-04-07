@@ -6,12 +6,13 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { auth } from 'firebase/app';
 import {Router} from '@angular/router';
 import {AuthService} from '../auth.service';
-import {NavController} from '@ionic/angular';
+import {NavController, MenuController} from '@ionic/angular';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
 import {resolve} from '@angular-devkit/core';
 import * as firebase from 'firebase';
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
+import {LOGIN} from '../constants/formValidationMessage';
 
 
 @Component({
@@ -25,7 +26,16 @@ export class AuthentPage implements OnInit {
     mail: string;
   credential: auth.OAuthCredential;
   showDeleteTodoSpinner: boolean;
-  constructor(
+    loginForm: FormGroup;
+    email: FormControl;
+    password: FormControl;
+    formError: any = {
+        email: '',
+        password: ''
+    };
+    validationMessage: any = LOGIN;
+
+    constructor(
       private fb: Facebook,
       private afAuth: AngularFireAuth,
       private navCtrl: NavController,
@@ -35,35 +45,41 @@ export class AuthentPage implements OnInit {
       private todolistservice: TodoslistService,
       private googlePlus: GooglePlus,
       private helperService : HelperService,
-
-  ) { }
-
-    validationsform: FormGroup;
-    errorMessage = '';
+      private menuCtlr: MenuController
 
 
-    validation_messages = {
-        email: [
-            { type: 'required', message: 'Email obligatoire.' },
-            { type: 'pattern', message: 'Entrer un email valide.' }
-        ],
-        password: [
-            { type: 'required', message: 'Mot de passe obligatoire.' },
-            { type: 'minlength', message: 'Mot de passe doit contenir au moins 5 caractères.' }
-        ]
-    };
+  ) { this.menuActive();}
+
+
     ngOnInit() {
-
-        this.validationsform = this.formBuilder.group({
-            email: new FormControl('', Validators.compose([
-                Validators.required,
-                Validators.pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
-            ])),
-            password: new FormControl('', Validators.compose([
-                Validators.minLength(5),
-                Validators.required
-            ])),
+        this.createFormControl();
+        this.createForm();
+    }
+    menuActive() {
+      this.menuCtlr.enable(false, 'menu_1');
+  }
+    createForm() {
+        this.loginForm = new FormGroup({
+            email: this.email,
+            password: this.password
         });
+        this.loginForm.valueChanges.subscribe(data => this.onFormValueChanged(data));
+
+    }
+
+    onFormValueChanged(data) {
+        this.formError = HelperService.prepareValidationMessage(this.loginForm, this.validationMessage, this.formError);
+    }
+
+    createFormControl() {
+        this.email = new FormControl('', [
+            Validators.required,
+            Validators.email
+        ]);
+        this.password = new FormControl('', [
+            Validators.required,
+            Validators.minLength(5)
+        ]);
     }
 
     loginUser(value) {
@@ -75,14 +91,15 @@ export class AuthentPage implements OnInit {
 
                 } else {
                     this.authService.authenticated = true;
-                    console.log('bonjour');
                     console.log(res);
-                    this.errorMessage = '';
                     this.navCtrl.navigateForward('/todoslist');
                 }
                 this.mail = value.email;
             }, err => {
-          this.errorMessage = err.message;
+            console.log('Error', err);
+            if (err.code === 'auth/user-not-found') {
+                this.helperService.presentToast('There is no user record corresponding to this identifier');
+            }
         });
   }
 
@@ -90,30 +107,6 @@ export class AuthentPage implements OnInit {
     this.navCtrl.navigateForward('/register');
   }
 
-  loginwithgooglee() {
-        this.gooleprovider  = new auth.GoogleAuthProvider();
-        this.authService.authenticated = false;
-        this.afAuth.auth.signInWithPopup(this.gooleprovider).then((r) => { this.authService.authenticated = true;
-                                                                           this.navCtrl.navigateForward('/todoslist');
-        });
-
-    }
-
-    loginwithgooglle() {
-      this.authService.authenticated = false;
-      this.googlePlus.login({})
-        .then(res =>
-          {
-            this.authService.authenticated = true;
-            console.log(res);
-          } ).then(()=>{
-            console.log("navigate");
-            this.navCtrl.navigateForward('/todoslist');
-
-          })
-        .catch(err => console.log('err',err));
-
-  }
 
 
   async loginwithgoogle() {
@@ -121,7 +114,7 @@ export class AuthentPage implements OnInit {
 
     this.googlePlus.login( {
       'sha1': '78:42:c2:d6:49:d8:3a:85:31:dd:ed:31:1b:c1:b8:63:21:ce:25:64',
-      'webClientId': '920900901910-7calpuag1n7nemboks5vmg16eqivluet.apps.googleusercontent.com',
+        'webClientId': '920900901910-1djsishtphggrk80afk0jiicoec3n6r4.apps.googleusercontent.com',
       'offline': true
     })
       .then((response) => {
@@ -141,7 +134,6 @@ export class AuthentPage implements OnInit {
         console.log(response);
         this.authService.authenticated = true;
         this.todolistservice.init_fire();
-                    console.log('*****', firebase.auth().currentUser.uid);
                     const userId = firebase.auth().currentUser.uid;
                     const userDoc = this.fires.doc<any>('users/' + userId);
                     userDoc.set({
@@ -152,35 +144,17 @@ export class AuthentPage implements OnInit {
               });
 
         this.navCtrl.navigateForward('/todoslist');
-      })
+      });
 
-  }
-  onLoginError(err) {
-    console.log(err);
   }
 
     resetPassword(value: any): any {
         this.navCtrl.navigateForward('/reset-pass');
-        /*console.log(value.email);
-        return firebase.auth().sendPasswordResetEmail(value.email);*/
-    }
 
-    loginwithfacebook() {
-      this.loginwithfacebook0();
-       /* this.fb.login(['public_profile', 'user_friends', 'email'])
-            .then((res: FacebookLoginResponse) => {
-                this.authService.authenticated = true;
-                console.log('res facbook connect ',res);
-                this.navCtrl.navigateForward('/todoslist');
-            }
-                )
-            .catch(e => console.log('Error  Facebook', e));
-        this.fb.logEvent(this.fb.EVENTS.EVENT_NAME_ADDED_TO_CART);*/
     }
 
 
-
-    async loginwithfacebook0(): Promise<void> {
+    async loginwithfacebook(): Promise<void> {
         try {
           const response = await this.fb.login(["public_profile", "email"]);
     
@@ -201,7 +175,6 @@ export class AuthentPage implements OnInit {
                     this.authService.authenticated = true;
                     this.navCtrl.navigateForward('/todoslist');
                     this.todolistservice.init_fire();
-                    console.log('*****', firebase.auth().currentUser.uid);
                     const userId = firebase.auth().currentUser.uid;
                     const userDoc = this.fires.doc<any>('users/' + userId);
 
@@ -217,24 +190,15 @@ export class AuthentPage implements OnInit {
                     });
       
                   });
-                    /*userDoc.set({
-                            firstName: value.firstName,
-                            lastName: value.lastName,
-                            email: value.email,
-                            id : userId,
-                    });*/
                   })
                   .catch(error => {
                     this.showDeleteTodoSpinner = true;
                     this.helperService.presentToast('Adresse existe déjà!!');
                     this.showDeleteTodoSpinner = false;
-                    console.log(error,'hello facebook');
+                    console.log(error);
                   });
                   
-              } else {
-                // User is already signed-in Firebase with the correct user.
-                console.log("deja connecté ");
-              }
+              } 
             });
           } else {
             // User is signed-out of Facebook.
@@ -259,8 +223,7 @@ export class AuthentPage implements OnInit {
             }
           });
         }
-    
-        return false;
+          return false;
       }
    
 

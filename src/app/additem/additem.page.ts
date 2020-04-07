@@ -38,7 +38,6 @@ export class AdditemPage implements OnInit {
         },
         (onerror) => console.log('error:', onerror)
       );
-      //this.title = this.matches[0].toString();
 }
 
 startvoca2() {
@@ -54,7 +53,6 @@ startvoca2() {
       },
       (onerror) => console.log('error:', onerror)
     );
-    //this.desc = this.matchess[0].toString();
 
 }
 

@@ -17,8 +17,6 @@ import { NativeGeocoder, NativeGeocoderResult, NativeGeocoderOptions } from '@io
 export class AddtodoPage implements OnInit {
   matches: string[];
   title: string;
-  hello: string;
-  desc: string;
   matchess: string[];
   showAddTodoSpinner = false;
   latitude: any;
@@ -29,7 +27,9 @@ export class AddtodoPage implements OnInit {
               private router: Router ,
               private geolocation: Geolocation,
               private nativeGeocoder: NativeGeocoder,
-              private helperService: HelperService, private speechRecognition: SpeechRecognition,private cd: ChangeDetectorRef) { }
+              private helperService: HelperService, private speechRecognition: SpeechRecognition,private cd: ChangeDetectorRef) { 
+                this.getLocation();
+              }
 
   ngOnInit() {
     this.getpermissions()
@@ -46,7 +46,7 @@ export class AddtodoPage implements OnInit {
         },
         (onerror) => console.log('error:', onerror)
       );
-      //this.title = this.matches[0].toString();
+
 }
 
 

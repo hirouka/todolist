@@ -1,6 +1,6 @@
 import { Router } from '@angular/router';
 import { AuthService } from './auth.service';
-import { Component } from '@angular/core';
+import { Component, AfterContentInit } from '@angular/core';
 
 import { MenuController, Platform, NavController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -14,6 +14,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 export class AppComponent {
   errorMessage = '';
   photo : any; 
+  AfficherMenu = false; 
   constructor(
     private navCtrl : NavController,
     private menu: MenuController,
@@ -22,8 +23,13 @@ export class AppComponent {
     private statusBar: StatusBar,
     private authservice: AuthService,
     private router: Router) {
+    this.AfficherMenu = this.authservice.authenticated;
     this.initializeApp();
     this.photo ='../assets/HTMLIonAvatarElement.png';
+
+}
+AfterContentInit(){
+  this.AfficherMenu = this.authservice.authenticated;
 
 }
 
@@ -38,7 +44,6 @@ onLogout() {
   this.authservice.logoutUser()
   .then(res => {
       this.authservice.authenticated = false;
-      console.log('byebye');
       console.log(res);
       this.errorMessage = '';
       this.navCtrl.navigateForward('');

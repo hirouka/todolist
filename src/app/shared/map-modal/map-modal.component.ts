@@ -1,3 +1,4 @@
+import { NativeGeocoderOptions, NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ModalController} from '@ionic/angular';
 import {AngularFireAuth} from '@angular/fire/auth';
@@ -7,6 +8,7 @@ import {Capacitor, Plugins} from '@capacitor/core';
 import {map} from 'rxjs/operators';
 import actions from '@angular/fire/schematics/deploy/actions';
 import {HelperService} from '../../services/helper.service';
+
 
 const {Geolocation} = Plugins;
 declare var google;
@@ -26,11 +28,13 @@ export class MapModalComponent implements OnInit {
   markers = [];
   isTracking = false;
   watch = null;
+  resultatAdress: string;
 
   constructor(private modalCtrl: ModalController,
               private angularFireAuth: AngularFireAuth,
               private angularFireStore: AngularFirestore,
-              private helperService: HelperService
+              private helperService: HelperService,
+              private nativeGeocoder: NativeGeocoder
   ) {
     this.getData();
   }
@@ -72,9 +76,11 @@ export class MapModalComponent implements OnInit {
   }
 
   updateMap(locations) {
+  
     this.markers.map(marker => marker.setMap(null));
     this.markers = [];
     for (let loc of locations) {
+     
       let LatLng = new google.maps.LatLng(loc.lat, loc.lng);
       let marker = new google.maps.Marker({
         position: LatLng,
@@ -82,6 +88,7 @@ export class MapModalComponent implements OnInit {
         map: this.map
       });
       this.markers.push(marker);
+
     }
 
   }
@@ -100,7 +107,7 @@ export class MapModalComponent implements OnInit {
 
   startTracking() {
     this.isTracking = true;
-    this.helperService.presentToast('Tracking your location is started!');
+    this.helperService.presentToast('Le suivi de votre position a commencé!');
     this.watch = Geolocation.watchPosition({}, (position, err) => {
       console.log('new position: ', position);
       if (position) {
@@ -116,11 +123,25 @@ export class MapModalComponent implements OnInit {
   stopTracking() {
     Geolocation.clearWatch({id: this.watch}).then(() => {
       this.isTracking = false;
-      this.helperService.presentToast('Tracking your location is stopped!');
+      this.helperService.presentToast('Le suivi de votre position est arrêté!');
 
     });
   }
 
+  reversLocation(latitude,longitude){
+    let options: NativeGeocoderOptions = {
+      useLocale: true,
+      maxResults: 5
+    };
+    this.nativeGeocoder.reverseGeocode(latitude, longitude, options)
+    .then((result) =>{
+      this.resultatAdress = JSON.stringify(result[0]);
+      console.log(this.resultatAdress);
+      this.resultatAdress =  result[0].subThoroughfare + " " + result[0].thoroughfare +" " + result[0].postalCode +" " +result[0].locality;
+      console.log(this.resultatAdress);
+    })
+    .catch((error: any) => console.log(error));
+  }
   addNewLocation(lat, lng, timestamp) {
     this.locationCollection.add({
       lat,

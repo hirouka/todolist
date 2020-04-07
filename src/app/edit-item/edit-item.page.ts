@@ -16,7 +16,6 @@ export class EditItemPage implements OnInit {
 
   matches: string[];
   title: string;
-  hello: string;
   desc: string;
   matchess: string[];
   showAddTodoSpinner = false;
@@ -42,7 +41,6 @@ export class EditItemPage implements OnInit {
         },
         (onerror) => console.log('error:', onerror)
       );
-      //this.title = this.matches[0].toString();
 }
 
 startvoca2() {
@@ -57,19 +55,16 @@ startvoca2() {
       },
       (onerror) => console.log('error:', onerror)
     );
-    //this.desc = this.matchess[0].toString();
 
 }
 
 
   editItem() {
     this.listService.editItem(this.title,this.desc).then(()=>{
-     // this.listService.getUnsubscribe();
 
     });
     this.router.navigate(['/todo-item']).then(()=>{
       this.helperService.presentToast('Tâche modifiée!');
-      //this.listService.getUnsubscribe();
     });
   }
 
